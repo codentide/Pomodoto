@@ -1,0 +1,40 @@
+// Hue
+$hue: 80;
+
+// Primary Colors
+$pm-100: hsl($hue, 50%, 90%);
+$pm-200: hsl($hue, 50%, 80%);
+$pm-300: hsl($hue, 60%, 70%);
+$pm-400: hsl($hue, 60%, 50%);
+$pm-500: hsl($hue, 70%, 30%);
+$pm-600: hsl($hue, 70%, 20%);
+$pm-700: hsl($hue, 80%, 10%);
+
+// Border
+$border-100: hsl(0, 0%, 70%);
+$border-200: hsl(0, 0%, 60%);
+$border-300: hsl(0, 0%, 50%);
+$border-400: hsl(0, 0%, 40%);
+$border-500: hsl(0, 0%, 30%);
+
+// White
+$wh-100: hsl(0, 0%, 90%);
+$wh-200: hsl(0, 0%, 80%);
+$wh-300: hsl(0, 0%, 70%);
+$wh-400: hsl(0, 0%, 60%);
+$wh-500: hsl(0, 0%, 50%);
+
+// Black
+$bl-100: hsl(0, 0%, 8%);
+$bl-200: hsl(0, 0%, 16%);
+$bl-300: hsl(0, 0%, 24%);
+$bl-400: hsl(0, 0%, 32%);
+$bl-500: hsl(0, 0%, 40%);
+
+// Font Sizes
+$font-size-base: 16px;
+
+// Font Families
+$font-family-base: 'Arial', sans-serif;
+
+

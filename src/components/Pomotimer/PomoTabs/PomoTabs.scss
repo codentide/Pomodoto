@@ -1,0 +1,38 @@
+@use '../../../scss/index.scss' as *;
+@use '../../../scss/variables.scss' as *;
+
+.pomo-timer__tab-box {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+
+  width: 100%;
+  padding: .4rem;
+  border-radius: .4rem;
+
+  background-color: $bl-200;
+  
+  &__tab {
+    display: grid;
+    place-items: center;
+
+    width: 100%;
+    padding: .36rem .8rem;
+    border-radius: .3rem;
+    border: none;
+
+    font-size: .8rem;
+    font-weight: 400;
+
+    color: $wh-500;
+    background-color: transparent;
+
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+
+    &.active {
+      background-color: $bl-300;
+      color: $wh-100;
+    }
+  }
+}
