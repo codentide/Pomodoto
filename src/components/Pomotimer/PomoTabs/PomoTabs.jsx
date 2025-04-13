@@ -1,23 +1,21 @@
 import { useContext } from 'react'
 import { PomodoroContext } from '../../../context/pomodoro/pomodoro.context'
-
 import './PomoTabs.scss'
 
 export const PomoTabs = () => {
-  const { activeMode, updateActiveMode } = useContext(PomodoroContext)
+  const { currentMode, updateCurrentMode } = useContext(PomodoroContext)
 
-  // Handle tab click
   const handleClick = (e) => {
-    const tab = e.target.getAttribute('data-tab')
-    updateActiveMode(tab)
+    const mode = e.target.getAttribute('data-tab')
+    updateCurrentMode(mode, true)
   }
 
-  // Tabs are generated here
   return (
     <div className="pomo-timer__tab-box">
       <button
         className={
-          'pomo-timer__tab-box__tab ' + (activeMode === 'pomo' && 'active')
+          'pomo-timer__tab-box__tab ' +
+          (currentMode.mode === 'pomo' && 'active')
         }
         onClick={handleClick}
         data-tab="pomo"
@@ -26,7 +24,8 @@ export const PomoTabs = () => {
       </button>{' '}
       <button
         className={
-          'pomo-timer__tab-box__tab ' + (activeMode === 'short' && 'active')
+          'pomo-timer__tab-box__tab ' +
+          (currentMode.mode === 'short' && 'active')
         }
         onClick={handleClick}
         data-tab="short"
@@ -35,7 +34,8 @@ export const PomoTabs = () => {
       </button>{' '}
       <button
         className={
-          'pomo-timer__tab-box__tab ' + (activeMode === 'long' && 'active')
+          'pomo-timer__tab-box__tab ' +
+          (currentMode.mode === 'long' && 'active')
         }
         onClick={handleClick}
         data-tab="long"

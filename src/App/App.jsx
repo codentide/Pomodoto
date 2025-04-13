@@ -5,6 +5,9 @@ import { Pomolist, PomoTimer } from '../components'
 import { requestPermission } from '../tools'
 import logo from '/logo.png'
 
+// [ ]: Añadir sistema de audio para alarma
+// [ ]: Implementar audio para el "ticking"
+
 export function App() {
   useEffect(() => {
     requestPermission()

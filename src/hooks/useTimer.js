@@ -2,33 +2,53 @@ import { useContext, useState, useEffect, useRef } from 'react'
 import { PomodoroContext } from '../context/pomodoro/pomodoro.context'
 import { notify } from '../tools/notification'
 
-// [ ]: Implementar la secuencia de tipos (pomo -> short -> pomo -> long -> pomo)
-// NOTA: usar longBreakInterval para controlar el intervalo de los long breaks
-
-// [ ]: Implementar autoStartBreak (hacer que el break inicie automaticamente luego de un pomo)
-// [ ]: Implementar autoStartPomodoro (hacer que el pomo inicie automaticamente)
+// [x]: Implementar la secuencia de tipos (pomo -> short -> pomo -> long -> pomo)
+// [x]: Implementar autoStartBreak (hacer que el break inicie automaticamente luego de un pomo)
+// [x]: Implementar autoStartPomodoro (hacer que el pomo inicie automaticamente)
 
 export const useTimer = () => {
-  // Configuraciones y modo actual
-  const { activeMode, pomoSettings } = useContext(PomodoroContext)
-  // Valores de cada sesion
-  const { sessionValues, notification } = pomoSettings
+  // Estado global y configuraciones
+  const { currentMode, updateCurrentMode, settings } =
+    useContext(PomodoroContext)
+  const { mode, wasActivatedManually } = currentMode
+  const {
+    sessionValues,
+    notification,
+    longBreakInterval,
+    autoStartBreak,
+    autoStartPomodoro
+  } = settings
+
   // Tiempo restante segun modo activo
-  const [timeLeft, setTimeLeft] = useState(sessionValues[activeMode])
+  const [timeLeft, setTimeLeft] = useState(sessionValues[mode])
   // Flag para controlar el estado del timer
   const [isRunning, setIsRunning] = useState(false)
-  // Referencia al intervalo del timer
-  const intervalRef = useRef(null)
 
-  // Efecto del intervalo del timer
+  // Referencias
+
+  /** Almacena el id del intervalo del timer */
+  const intervalRef = useRef(null)
+  /** Almacena la cantidad de pomodoros terminados */
+  const endedPomosRef = useRef(0)
+  /** Es una flag para controlar end() */
+  const hasEndedRef = useRef(false)
+  /** Es una flag que controla el primer render */
+  const isFirstRender = useRef(true)
+
+  /**
+   * Efecto encargado de:
+   * Iniciar el intervalo del timer
+   * En caso de que el timer termine limpiar el intervalo y ejecutar @function end()
+   *
+   * @param {boolean} isRunning - Determina cuando iniciar el timer
+   */
   useEffect(() => {
-    // Si la flag isRunning es false, no se ejecuta el intervalo
     if (!isRunning) return
+    console.log('Timer started')
 
     // Iniciar nuevo intervalo
     intervalRef.current = setInterval(() => {
       setTimeLeft((prev) => {
-        // Stop timer when it reaches 0
         if (prev <= 1) {
           end()
           return 0
@@ -39,41 +59,89 @@ export const useTimer = () => {
 
     // Cleanup on unmount or when isRunning changes
     return () => {
-      console.log('Cleaning up interval')
       clearInterval(intervalRef.current)
+      hasEndedRef.current = false
     }
   }, [isRunning])
 
-  // Reset timer when mode changes
+  /**
+   * Efecto encargado de:
+   * Reiniciar el conteo del timer
+   * En caso de estar habilitado el autoStart, iniciar el timer
+   *
+   * Cambiar el estado del timer
+   * @param {string} mode - Reacciona a los cambios de modo
+   */
   useEffect(() => {
-    console.log('Mode changed to', activeMode)
-    setTimeLeft(sessionValues[activeMode])
-    setIsRunning(false)
-  }, [activeMode])
+    console.log('Mode changed to:', mode)
+    setTimeLeft(sessionValues[mode])
 
-  // Timer control functions
+    if (!isFirstRender.current && !wasActivatedManually) {
+      setIsRunning(doesAutoStart(mode))
+    }
+
+    isFirstRender.current = false
+  }, [mode])
+
+  /**
+   *
+   * @param {'pomo' | 'short' | 'long'} mode - Modo actual
+   * @returns {boolean} Determina si el timer inicia automaticamente
+   */
+  const doesAutoStart = (mode) => {
+    return mode === 'pomo' ? autoStartPomodoro : autoStartBreak
+  }
+
+  /**
+   * Determina el siguiente modo del timer
+   */
+  const getNextMode = () => {
+    if (mode === 'pomo') {
+      endedPomosRef.current += 1
+      return endedPomosRef.current % longBreakInterval === 0 ? 'long' : 'short'
+    }
+    return 'pomo'
+  }
+
+  /**
+   * Inicia el timer
+   */
   const start = () => {
-    console.log('Timer started')
     setIsRunning(true)
   }
 
+  /**
+   * Pausa el timer
+   */
   const pause = () => {
     console.log('Timer paused')
     setIsRunning(false)
   }
 
+  /**
+   * Detiene el timer y reinicia el tiempo restante al valor de la sesión actual
+   */
   const stop = () => {
     console.log('Timer stopped')
     setIsRunning(false)
-    setTimeLeft(sessionValues[activeMode])
+    setTimeLeft(sessionValues[mode])
   }
 
+  /**
+   * Finaliza el timer y cambia el modo actual
+   */
   const end = () => {
-    console.log('Timer ended')
-    setIsRunning(false)
+    if (hasEndedRef.current) return
 
-    setTimeLeft(sessionValues[activeMode])
-    notify(activeMode, notification)
+    console.log('Timer ended')
+    hasEndedRef.current = true
+
+    setIsRunning(false)
+    notify(mode, notification)
+
+    setTimeout(() => {
+      updateCurrentMode(getNextMode())
+    }, 1000)
   }
 
   return {
