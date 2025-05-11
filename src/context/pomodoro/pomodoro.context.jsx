@@ -52,8 +52,8 @@ export const PomodoroProvider = ({ children }) => {
       short: 300,
       long: 900
     },
-    autoStartBreak: true,
-    autoStartPomodoro: true,
+    autoStartBreak: false,
+    autoStartPomodoro: false,
     longBreakInterval: 4,
     notification: {
       isActive: true,

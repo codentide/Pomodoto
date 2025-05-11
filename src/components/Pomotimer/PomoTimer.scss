@@ -19,6 +19,8 @@
     font-weight: 500;
 
     text-align: center;
+
+    animation: fadeIn 0.8s forwards ease;
   }
 
   &__controls {
@@ -38,5 +40,14 @@
     }
   }
 }
-  
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;  // Empieza visible
+  }
+  to {
+    opacity: 1;  // Termina invisible
+  }
+}
+
 

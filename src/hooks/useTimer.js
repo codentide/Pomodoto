@@ -5,11 +5,11 @@ import { notify } from '../tools/notification'
 // [x]: Implementar la secuencia de tipos (pomo -> short -> pomo -> long -> pomo)
 // [x]: Implementar autoStartBreak (hacer que el break inicie automaticamente luego de un pomo)
 // [x]: Implementar autoStartPomodoro (hacer que el pomo inicie automaticamente)
+// [ ]: Definir mejor las responsabilidades de los componentes (contexto vs hook)
 
 export const useTimer = () => {
   // Estado global y configuraciones
-  const { currentMode, updateCurrentMode, settings } =
-    useContext(PomodoroContext)
+  const { currentMode, updateCurrentMode, settings } = useContext(PomodoroContext)
   const { mode, wasActivatedManually } = currentMode
   const {
     sessionValues,
