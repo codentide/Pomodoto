@@ -49,8 +49,8 @@ export const PomodoroProvider = ({ children }) => {
   const [settings, setSettings] = useState({
     sessionValues: {
       pomo: 1500,
-      short: 300,
-      long: 900
+      long: 900,
+      short: 300
     },
     autoStartBreak: false,
     autoStartPomodoro: false,
@@ -58,8 +58,8 @@ export const PomodoroProvider = ({ children }) => {
     notification: {
       isActive: true,
       sound: {
-        isActive: false,
-        track: 'default',
+        isActive: true,
+        track: 'retro-game',
         volume: 100
       }
     },
@@ -69,6 +69,27 @@ export const PomodoroProvider = ({ children }) => {
       volume: 100
     }
   })
+
+  function updateSettings(path, value) {
+    setSettings((prev) => {
+      // Clonamos settings
+      const newSettings = structuredClone(prev)
+      // sessionValues.pomo = [sessionValues, pomo]
+      const keys = path.split('.')
+      // Pasamos el clon de settings a current
+      let current = newSettings
+      // Si hay mas de una key
+      while (keys.length > 1) {
+        // Traemos el primer elemento del array keys
+        const key = keys.shift()
+        // Sacamos ese valor del current y lo guardamos en current
+        current = current[key]
+      }
+      //
+      current[keys[0]] = value
+      return newSettings
+    })
+  }
 
   /**
    * Actualiza la duración del pomodoro.
@@ -127,7 +148,9 @@ export const PomodoroProvider = ({ children }) => {
         updatePomo,
         updateShort,
         updateLong,
-        updateCurrentMode
+        updateCurrentMode,
+        updateSettings,
+        setSettings
       }}
     >
       {children}

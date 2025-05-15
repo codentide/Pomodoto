@@ -62,7 +62,7 @@ export const useTimer = () => {
       clearInterval(intervalRef.current)
       hasEndedRef.current = false
     }
-  }, [isRunning])
+  }, [isRunning, settings])
 
   /**
    * Efecto encargado de:
@@ -81,7 +81,7 @@ export const useTimer = () => {
     }
 
     isFirstRender.current = false
-  }, [mode])
+  }, [mode, settings])
 
   /**
    *

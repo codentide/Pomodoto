@@ -1,16 +1,119 @@
 @use '../scss/variables' as *;
+@use '../scss/index.scss' as *;
 
+// Control de paginas
 
-.main {
+.page {
+  --sidebar-width: 12.8rem;
+
+  position: absolute;
+  top: 0;
+  left: var(--sidebar-width);
+
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  width: calc(100% - var(--sidebar-width));
+  height: 100%;
+
+  padding: 2rem;
+
+  overflow-y: auto;
+}
+
+.page--visible {
+  opacity: 1;
+  transform: translateY(0);
+  z-index: 10;
+}
+
+.page--hidden {
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+// 
+
+main{
+  position: relative;
+  box-sizing: border-box;
+
+  height: 100%;
+}
+
+// [ ]: Migrar Home a su propio hoja de estilos
+
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
+// [ ]: Migrar Settings a su propio hoja de estilos
+
+.settings{
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  gap: 2rem;
 
-  width: 100%;
-  height: calc(100vh - 4rem);
+  .heading{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
 
-  padding: 0rem 32%;
+    h2{
+      font-size: .9rem;
+      font-weight: 400;
+      letter-spacing: .075rem;
+      color: $wh-500;
+    }
+    
+  }
+
+  form{
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+
+    width: 28rem;
+
+    button{
+      @include button-styles($wh-200, $bl-300, none);
+
+      font-family: inherit;
+      font-size: .9rem;
+      font-weight: 500;
+      text-transform: capitalize;
+
+      margin-top: 1rem;
+
+      padding: .65rem 0 .5rem;
+
+      &:hover{
+        filter: brightness(.9);
+      }
+    }
+
+    hr{
+      height: 1px;
+      border-radius: .4rem;
+
+      margin: .8rem 0;
+
+      border: none;
+      background-color: $bl-200;
+    }
+  }
+
 }
 
+  

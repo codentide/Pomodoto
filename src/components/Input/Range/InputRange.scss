@@ -1,0 +1,64 @@
+@use '../../../scss/variables' as *;
+
+.input-box:has(.input-box__range){
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+
+  .input-box__label {
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 300;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: .4rem;
+  }
+
+  input[type=range] {
+
+
+    transition: all .4s ease;
+    &::-webkit-slider-thumb {
+      cursor: grab;
+      &:active{
+        cursor: grabbing ;
+      }
+    }
+
+    &:focus {
+      filter: brightness(2);
+      outline: none;
+    }
+
+  }
+  
+  .range-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    small{
+      color: $wh-200;
+    }
+    
+    .current-value{
+      display: grid;
+      place-items: center;
+
+      width: 4rem;
+
+      padding: .2rem .6rem;
+      border-radius: .4rem;
+
+      font-variant-numeric: tabular-nums;
+
+      background-color: $bl-200;
+    }
+
+  }
+
+
+
+
+
+}

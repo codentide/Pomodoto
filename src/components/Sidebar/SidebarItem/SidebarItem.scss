@@ -1,0 +1,56 @@
+@use '../../../scss/variables.scss' as *;
+
+.header-item{
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+
+  transition: all .4s ease;
+  cursor: pointer;
+
+  &__icon{
+    aspect-ratio: 1;
+    width: 1.2rem;
+  }
+
+  &__text{
+    font-size: 1.1rem;
+
+    font-weight: 400;
+    text-decoration: none;
+
+    color: $wh-400;
+  }
+
+  &:hover{
+    filter: brightness(1.5);
+  }
+
+}
+
+.header-item{
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+
+  transition: all .4s ease;
+
+  &__icon{
+    aspect-ratio: 1;
+    width: 1.2rem;
+  }
+
+  &__text{
+    font-size: 1.1rem;
+
+    font-weight: 400;
+    text-decoration: none;
+
+    color: $wh-400;
+  }
+
+  &:hover{
+    filter: brightness(1.5);
+  }
+
+}

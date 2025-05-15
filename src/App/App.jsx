@@ -1,25 +1,36 @@
 import './App.scss'
 
-import { useEffect } from 'react'
-import { Pomolist, PomoTimer, Header } from '../components'
+import { useEffect, useContext } from 'react'
 import { requestNotificationPermission } from '../tools'
+import { Sidebar } from '../components'
+import { Home, Settings } from '../pages'
+import { PageContext } from '../context'
 
-// [ ]: Añadir sistema de audio para alarma
-// [ ]: Implementar audio para el "ticking"
+// [x]: Aplicar clase hidden en vez de usar renderizado condicional en el router
+// [ ]: Añadir en el timer "x of x sessions ended"
+
+const routes = [
+  { path: '/', Component: Home, isHidden: true },
+  { path: '/settings', Component: Settings }
+]
 
 export function App() {
+  const { currentPath, displayPage } = useContext(PageContext)
+
+  const routes = [
+    { path: '/', Component: Home, isHidden: true },
+    { path: '/settings', Component: Settings }
+  ]
+
   useEffect(() => {
+    console.log(currentPath)
     requestNotificationPermission()
-  }, [])
+  }, [currentPath])
 
   return (
-    <>
-      {/* TODO: Header tiene que ser un componente */}
-      <Header></Header>
-      <main className="main">
-        <PomoTimer />
-        <Pomolist />
-      </main>
-    </>
+    <main>
+      <Sidebar />
+      {routes.map(({ path, Component }) => displayPage(path, Component))}
+    </main>
   )
 }

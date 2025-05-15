@@ -1,13 +1,15 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './scss/index.scss'
 import { App } from './App/App'
-import { PomodoroProvider } from './context/pomodoro/pomodoro.context'
+import { PageProvider, PomodoroProvider } from './context'
+import './scss/index.scss'
 
 createRoot(document.getElementById('root')).render(
-  <PomodoroProvider>
-    <StrictMode>
-      <App />
-    </StrictMode>
-  </PomodoroProvider>
+  <PageProvider>
+    <PomodoroProvider>
+      <StrictMode>
+        <App />
+      </StrictMode>
+    </PomodoroProvider>
+  </PageProvider>
 )

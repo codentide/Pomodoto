@@ -15,15 +15,9 @@ export const PomoTimer = () => {
       <PomoTabs />
       <p className="pomo-timer__time">{secondsToTime(timeLeft)}</p>
       <div className="pomo-timer__controls">
-        <button
-          className="pomo-timer__controls__button"
-          onClick={isRunning ? pause : start}
-        >
-          {isRunning ? 'Pause' : 'Start'}
-        </button>
-        <button className="pomo-timer__controls__button" onClick={stop}>
-          Stop
-        </button>
+        <button onClick={start}>start</button>
+        <button onClick={pause}>pause</button>
+        <button onClick={stop}>stop</button>
       </div>
     </div>
   )
