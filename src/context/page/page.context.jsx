@@ -5,8 +5,10 @@ import { createContext } from 'react'
 export const PageContext = createContext()
 
 export const PageProvider = ({ children }) => {
+  // Estado para manejar el pathing
   const [currentPath, setCurrentPath] = useState(window.location.pathname)
 
+  // Maneja el estado y añade listener de evento pushstate & popstate
   useEffect(() => {
     const onLocationChange = () => {
       setCurrentPath(window.location.pathname)
@@ -21,6 +23,14 @@ export const PageProvider = ({ children }) => {
     }
   }, [])
 
+  // Cambia el path de la barra de navegacion sin recargar y emite evento "pushstate"
+  const navigate = (href) => {
+    window.history.pushState({}, '', href)
+    const navigationEvent = new Event('pushstate')
+    window.dispatchEvent(navigationEvent)
+  }
+
+  // Maneja la logica de mostrar y ocultar una page segun el path que se le de
   const displayPage = (path, Component) => {
     const isActive = path === currentPath
     const className = `page ${isActive ? 'page--visible' : 'page--hidden'}`
@@ -28,7 +38,7 @@ export const PageProvider = ({ children }) => {
   }
 
   return (
-    <PageContext.Provider value={{ currentPath, displayPage }}>
+    <PageContext.Provider value={{ currentPath, displayPage, navigate }}>
       {children}
     </PageContext.Provider>
   )

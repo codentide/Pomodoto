@@ -1,13 +1,6 @@
-/**
- * Converts total seconds to a formatted time string "MM:SS"
- * @param {number} seconds - Total number of seconds
- * @returns {string} Formatted time string "MM:SS"
- */
 export const secondsToTime = (seconds) => {
   const minutes = Math.floor(seconds / 60)
   const remainingSeconds = seconds % 60
-
-  // Pad both minutes and seconds with leading zeros if needed
   const formattedMinutes = minutes.toString().padStart(2, '0')
   const formattedSeconds = remainingSeconds.toString().padStart(2, '0')
 
@@ -17,9 +10,9 @@ export const secondsToTime = (seconds) => {
 export const timeToSeconds = (time) => {
   if (!time) return
 
-  const parts = time.split(":").map(Number)
+  const parts = time.split(':').map(Number)
 
-  if (parts.length === 2)  {
+  if (parts.length === 2) {
     const [minutes, seconds] = parts
     return minutes * 60 + seconds
   }
@@ -31,7 +24,6 @@ export const timeToSeconds = (time) => {
 
   throw new Error('Formato de tiempo no válido. Usa mm:ss o hh:mm:ss')
 }
-
 
 export const secondsToMinutes = (seconds) => {
   return Math.floor(seconds / 60)

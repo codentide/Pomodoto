@@ -1,42 +1,44 @@
 import { useContext } from 'react'
-import { PomodoroContext } from '../../../context/pomodoro/pomodoro.context'
+import { PomodoroContext } from '../../../context'
 import './PomoTabs.scss'
 
 export const PomoTabs = () => {
-  const { currentMode, updateCurrentMode } = useContext(PomodoroContext)
+  const { currentMode, updateCurrentMode, isRunning } =
+    useContext(PomodoroContext)
 
-  const handleClick = (e) => {
-    const mode = e.target.getAttribute('data-tab')
+  const handleClick = (event) => {
+    if (isRunning) {
+      const isConfirmed = window.confirm(
+        '¿Estás seguro de que deseas continuar?'
+      )
+
+      if (!isConfirmed) return
+    }
+
+    const button = event.target
+    const mode = button.getAttribute('data-tab')
+
     updateCurrentMode(mode, true)
   }
 
   return (
-    <div className="pomo-timer__tab-box">
+    <div className="tab-box">
       <button
-        className={
-          'pomo-timer__tab-box__tab ' +
-          (currentMode.mode === 'pomo' && 'active')
-        }
+        className={`tab-box__button ${currentMode === 'pomo' && 'active'}`}
         onClick={handleClick}
         data-tab="pomo"
       >
         Pomodoro
-      </button>{' '}
+      </button>
       <button
-        className={
-          'pomo-timer__tab-box__tab ' +
-          (currentMode.mode === 'short' && 'active')
-        }
+        className={`tab-box__button ${currentMode === 'short' && 'active'}`}
         onClick={handleClick}
         data-tab="short"
       >
         Short Break
-      </button>{' '}
+      </button>
       <button
-        className={
-          'pomo-timer__tab-box__tab ' +
-          (currentMode.mode === 'long' && 'active')
-        }
+        className={`tab-box__button ${currentMode === 'long' && 'active'}`}
         onClick={handleClick}
         data-tab="long"
       >

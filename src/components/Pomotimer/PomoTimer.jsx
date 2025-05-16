@@ -1,17 +1,19 @@
+import { useContext } from 'react'
 import { useTimer } from '../../hooks/useTimer'
-import { secondsToTime } from '../../tools'
+import { PomodoroContext } from '../../context'
 import { PomoTabs } from './PomoTabs/PomoTabs'
+import { secondsToTime } from '../../tools'
 import './PomoTimer.scss'
 
 export const PomoTimer = () => {
-  // Functions that manage the timer
-  const { isRunning, timeLeft, start, pause, stop } = useTimer()
+  const { timeLeft } = useContext(PomodoroContext)
+  const { start, pause, stop } = useTimer()
 
-  // TODO: Colocar iconos en los botones
+  // [ ]: Añadir botón para forzar la siguiente sesión (next)
+  // [ ]: Colocar iconos (play / pause - stop - next) en los botones
 
   return (
     <div className="pomo-timer">
-      {/* Tabs muestra y cambia el tipo de secuencia (pomodoro, short break, long break) */}
       <PomoTabs />
       <p className="pomo-timer__time">{secondsToTime(timeLeft)}</p>
       <div className="pomo-timer__controls">

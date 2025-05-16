@@ -1,10 +1,9 @@
-export function navigate(href) {
-  window.history.pushState({}, '', href)
-  const navigationEvent = new Event('pushstate')
-  window.dispatchEvent(navigationEvent)
-}
+import { useContext } from 'react'
+import { PageContext } from '../../context'
 
 export function Link({ target, to, ...props }) {
+  const { navigate } = useContext(PageContext)
+
   const handleClick = (event) => {
     // Capturar si es un click primario
     const isMainEvent = event.button === 0

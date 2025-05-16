@@ -1,26 +1,22 @@
 import { useContext } from 'react'
 import { PomodoroContext } from '../context'
+import { Range } from '../components'
 import { minutesToSeconds, secondsToMinutes } from '../tools'
 
-import { Range, InputRange } from '../components'
-
 export function Settings({ className }) {
-  const { settings, updateSettings } = useContext(PomodoroContext)
+  const { settings, updateSettings, updateIsRunning } =
+    useContext(PomodoroContext)
   const { sessionValues } = settings
 
-  const onSubmit = (event) => {
-    event.preventDefault()
-  }
-
   const onInputChange = (name, value, type) => {
+    updateIsRunning(false, true)
+
     switch (type) {
       case 'minute':
         updateSettings(name, minutesToSeconds(value))
         break
       case 'number':
         updateSettings(name, Number(value))
-        break
-      default:
         break
     }
   }
@@ -30,8 +26,7 @@ export function Settings({ className }) {
       <div className="heading">
         <h2>Settings</h2>
       </div>
-
-      <form onSubmit={onSubmit}>
+      <form>
         <Range
           name="sessionValues.pomo"
           label="Pomo duration"
@@ -67,8 +62,6 @@ export function Settings({ className }) {
           defaultValue={settings.longBreakInterval}
           onChange={(name, value) => onInputChange(name, value, 'number')}
         />
-
-        {/* <button>Submit</button> */}
       </form>
     </section>
   )

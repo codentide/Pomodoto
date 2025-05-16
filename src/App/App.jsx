@@ -1,10 +1,9 @@
-import './App.scss'
-
 import { useEffect, useContext } from 'react'
-import { requestNotificationPermission } from '../tools'
-import { Sidebar } from '../components'
-import { Home, Settings } from '../pages'
 import { PageContext } from '../context'
+import { Home, Settings } from '../pages'
+import { Sidebar } from '../components'
+import { requestNotificationPermission } from '../tools'
+import './App.scss'
 
 // [x]: Aplicar clase hidden en vez de usar renderizado condicional en el router
 // [ ]: Añadir en el timer "x of x sessions ended"
@@ -15,17 +14,11 @@ const routes = [
 ]
 
 export function App() {
-  const { currentPath, displayPage } = useContext(PageContext)
-
-  const routes = [
-    { path: '/', Component: Home, isHidden: true },
-    { path: '/settings', Component: Settings }
-  ]
+  const { displayPage } = useContext(PageContext)
 
   useEffect(() => {
-    console.log(currentPath)
     requestNotificationPermission()
-  }, [currentPath])
+  }, [])
 
   return (
     <main>

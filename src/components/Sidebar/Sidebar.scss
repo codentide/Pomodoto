@@ -3,20 +3,17 @@
 .sidebar {
   position: fixed;
   z-index: 1000;
-  left: .8rem;
-  top: .8rem;
-  bottom: .8rem;
+  left: $sidebar-gap;
+  top: $sidebar-gap;
+  bottom: $sidebar-gap;
 
   display: flex;
   flex-direction: column;
-  align-items: center;
 
   width: 12rem;
-
   border-radius: .8rem;
-
+    
   border: 1px solid $bl-200; 
-
   background-color: $bl-100;
 
   &__logo-section {
@@ -24,34 +21,28 @@
     align-items: center;
     gap: .4rem;
 
-    width: 100%;
     padding: 1rem 1.8rem;
-
     border-bottom: 1px solid $bl-200; 
 
     img {
       height: auto;
-      width: 100%;
-      max-width: 2rem;
+      width: 2rem;
     }
 
     p {
         font-size: 1rem;
-        font-weight: 700;
+        font-weight: 600;
+        color: $wh-100;
     }
   }
 
   &__nav {
-    width: 100%;
-    height: auto;
-
     padding: 1.2rem;
 
     ul{
       display: flex;
       flex-direction: column;
       align-items: left;
-
       gap: .4rem;
 
       list-style: none;
@@ -82,15 +73,17 @@
           }
 
           &:hover{
-            filter: brightness(1.2);
-            background-color: hsl(0, 0%, 10%);
+            filter: brightness(1.4);
+            background-color: hsl(0, 0%, 8%);
           }
         }
       }
     }
   }
 
+  // [ ]: Implementar seccion Login en Sidebar 
   &__login-box{
     margin-top: auto;
   }
+
 }

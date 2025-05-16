@@ -1,10 +1,10 @@
-import { playAlarm } from "./alarm"
+import { playAlarm } from './alarm'
 
 export function notify(activeMode, { isActive, sound }) {
   if (Notification.permission === 'granted' && isActive) {
     new Notification('Tiempo terminado', {
       body: `Finalizó tu sesión ${activeMode}`,
-      icon: '/favicon.png' // opcional: ícono personalizado
+      icon: '/favicon.png'
     })
 
     if (sound.isActive) playAlarm(sound.track, sound.volume)
@@ -16,4 +16,3 @@ export function requestNotificationPermission() {
     Notification.requestPermission()
   }
 }
-

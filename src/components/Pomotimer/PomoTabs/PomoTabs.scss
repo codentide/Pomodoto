@@ -1,7 +1,7 @@
 @use '../../../scss/index.scss' as *;
 @use '../../../scss/variables.scss' as *;
 
-.pomo-timer__tab-box {
+.tab-box {
   display: flex;
   align-items: center;
   gap: .4rem;
@@ -12,7 +12,7 @@
 
   background-color: $bl-100;
   
-  &__tab {
+  &__button {
     display: grid;
     place-items: center;
 

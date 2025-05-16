@@ -4,17 +4,15 @@
 // Control de paginas
 
 .page {
-  --sidebar-width: 12.8rem;
-
   position: absolute;
   top: 0;
-  left: var(--sidebar-width);
+  left: $sidebar-width;
 
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
 
-  width: calc(100% - var(--sidebar-width));
+  width: calc(100% - $sidebar-width);
   height: 100%;
 
   padding: 2rem;

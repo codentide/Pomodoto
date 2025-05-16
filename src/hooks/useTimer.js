@@ -9,8 +9,17 @@ import { notify } from '../tools/notification'
 
 export const useTimer = () => {
   // Estado global y configuraciones
-  const { currentMode, updateCurrentMode, settings } = useContext(PomodoroContext)
-  const { mode, wasActivatedManually } = currentMode
+  const {
+    currentMode,
+    isRunning,
+    updateCurrentMode,
+    updateTimeLeft,
+    updateIsRunning,
+    settings,
+    userInterrupted,
+    updateUserInterrupted
+  } = useContext(PomodoroContext)
+
   const {
     sessionValues,
     notification,
@@ -19,36 +28,20 @@ export const useTimer = () => {
     autoStartPomodoro
   } = settings
 
-  // Tiempo restante segun modo activo
-  const [timeLeft, setTimeLeft] = useState(sessionValues[mode])
-  // Flag para controlar el estado del timer
-  const [isRunning, setIsRunning] = useState(false)
-
   // Referencias
-
-  /** Almacena el id del intervalo del timer */
-  const intervalRef = useRef(null)
-  /** Almacena la cantidad de pomodoros terminados */
-  const endedPomosRef = useRef(0)
-  /** Es una flag para controlar end() */
-  const hasEndedRef = useRef(false)
-  /** Es una flag que controla el primer render */
   const isFirstRender = useRef(true)
+  const intervalRef = useRef(null)
+  const endedPomosRef = useRef(0)
+  const hasEndedRef = useRef(false)
 
-  /**
-   * Efecto encargado de:
-   * Iniciar el intervalo del timer
-   * En caso de que el timer termine limpiar el intervalo y ejecutar @function end()
-   *
-   * @param {boolean} isRunning - Determina cuando iniciar el timer
-   */
   useEffect(() => {
     if (!isRunning) return
+    if (intervalRef.current) return
     console.log('Timer started')
 
     // Iniciar nuevo intervalo
     intervalRef.current = setInterval(() => {
-      setTimeLeft((prev) => {
+      updateTimeLeft((prev) => {
         if (prev <= 1) {
           end()
           return 0
@@ -57,31 +50,31 @@ export const useTimer = () => {
       })
     }, 1000)
 
-    // Cleanup on unmount or when isRunning changes
     return () => {
       clearInterval(intervalRef.current)
+      intervalRef.current = null
       hasEndedRef.current = false
     }
-  }, [isRunning, settings])
+  }, [isRunning])
 
-  /**
-   * Efecto encargado de:
-   * Reiniciar el conteo del timer
-   * En caso de estar habilitado el autoStart, iniciar el timer
-   *
-   * Cambiar el estado del timer
-   * @param {string} mode - Reacciona a los cambios de modo
-   */
+  /*
+   Efecto encargado de: 
+   - Reiniciar el conteo del timer
+   - Valida si los eventos los desata el usuario o el flujo del app
+   - En caso de estar habilitado el autoStart, iniciar el timer
+  */
   useEffect(() => {
-    console.log('Mode changed to:', mode)
-    setTimeLeft(sessionValues[mode])
+    console.log('USER-INTERRUPTED', userInterrupted)
 
-    if (!isFirstRender.current && !wasActivatedManually) {
-      setIsRunning(doesAutoStart(mode))
+    if (!isFirstRender.current && !userInterrupted) {
+      updateTimeLeft(sessionValues[currentMode])
+      updateIsRunning(doesAutoStart(currentMode))
+    } else {
+      updateIsRunning(false, userInterrupted)
     }
 
     isFirstRender.current = false
-  }, [mode, settings])
+  }, [currentMode, userInterrupted])
 
   /**
    *
@@ -96,7 +89,7 @@ export const useTimer = () => {
    * Determina el siguiente modo del timer
    */
   const getNextMode = () => {
-    if (mode === 'pomo') {
+    if (currentMode === 'pomo') {
       endedPomosRef.current += 1
       return endedPomosRef.current % longBreakInterval === 0 ? 'long' : 'short'
     }
@@ -107,15 +100,13 @@ export const useTimer = () => {
    * Inicia el timer
    */
   const start = () => {
-    setIsRunning(true)
+    if (!isRunning) updateIsRunning(true)
   }
 
-  /**
-   * Pausa el timer
-   */
+  // Pausa el timer (Manual)
   const pause = () => {
     console.log('Timer paused')
-    setIsRunning(false)
+    updateIsRunning(false, true)
   }
 
   /**
@@ -123,21 +114,19 @@ export const useTimer = () => {
    */
   const stop = () => {
     console.log('Timer stopped')
-    setIsRunning(false)
-    setTimeLeft(sessionValues[mode])
+    updateIsRunning(false, true)
+    updateTimeLeft(sessionValues[currentMode])
   }
 
-  /**
-   * Finaliza el timer y cambia el modo actual
-   */
+  // Finaliza el timer y cambia el modo actual
   const end = () => {
     if (hasEndedRef.current) return
 
     console.log('Timer ended')
     hasEndedRef.current = true
 
-    setIsRunning(false)
-    notify(mode, notification)
+    updateIsRunning(false)
+    notify(currentMode, notification)
 
     setTimeout(() => {
       updateCurrentMode(getNextMode())
@@ -145,8 +134,6 @@ export const useTimer = () => {
   }
 
   return {
-    isRunning,
-    timeLeft,
     start,
     pause,
     stop,

@@ -35,6 +35,29 @@ $bl-500: hsl(0, 0%, 40%);
 $font-size-base: 16px;
 
 // Font Families
-$font-family-base: 'Arial', sans-serif;
+$font-primary: 'Rubik', sans-serif;
+
+// Global 
+$sidebar-gap: .8rem;
+$sidebar-width: calc(12rem + $sidebar-gap);
+
+// Mixins
+@mixin button-styles($bg-color, $text-color, $border: none) {
+  display: inline-grid;
+  place-items: center;
+
+  padding: .36rem 1.2rem;
+  border: $border;
+  border-radius: .4rem;
+
+  text-decoration: none;
+  white-space: nowrap;
+  
+  color: $text-color;
+  background-color: $bg-color;
+  
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
 
 
