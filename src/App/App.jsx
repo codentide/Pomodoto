@@ -6,10 +6,10 @@ import { requestNotificationPermission } from '../tools'
 import './App.scss'
 
 // [x]: Aplicar clase hidden en vez de usar renderizado condicional en el router
-// [ ]: Añadir en el timer "x of x sessions ended"
+// [x]: Añadir en el timer "x of x sessions ended"
 
 const routes = [
-  { path: '/', Component: Home, isHidden: true },
+  { path: '/', Component: Home },
   { path: '/settings', Component: Settings }
 ]
 

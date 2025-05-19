@@ -2,22 +2,18 @@ import { useContext, useState, useEffect, useRef } from 'react'
 import { PomodoroContext } from '../context/pomodoro/pomodoro.context'
 import { notify } from '../tools/notification'
 
-// [x]: Implementar la secuencia de tipos (pomo -> short -> pomo -> long -> pomo)
-// [x]: Implementar autoStartBreak (hacer que el break inicie automaticamente luego de un pomo)
-// [x]: Implementar autoStartPomodoro (hacer que el pomo inicie automaticamente)
-// [ ]: Definir mejor las responsabilidades de los componentes (contexto vs hook)
-
 export const useTimer = () => {
-  // Estado global y configuraciones
   const {
     currentMode,
-    isRunning,
     updateCurrentMode,
-    updateTimeLeft,
+    isRunning,
     updateIsRunning,
+    updateTimeLeft,
     settings,
     userInterrupted,
-    updateUserInterrupted
+    endedPomodoros,
+    completePomodoro,
+    resetPomodoroCount
   } = useContext(PomodoroContext)
 
   const {
@@ -31,7 +27,7 @@ export const useTimer = () => {
   // Referencias
   const isFirstRender = useRef(true)
   const intervalRef = useRef(null)
-  const endedPomosRef = useRef(0)
+  const lastModeRef = useRef(null)
   const hasEndedRef = useRef(false)
 
   useEffect(() => {
@@ -64,8 +60,6 @@ export const useTimer = () => {
    - En caso de estar habilitado el autoStart, iniciar el timer
   */
   useEffect(() => {
-    console.log('USER-INTERRUPTED', userInterrupted)
-
     if (!isFirstRender.current && !userInterrupted) {
       updateTimeLeft(sessionValues[currentMode])
       updateIsRunning(doesAutoStart(currentMode))
@@ -89,21 +83,28 @@ export const useTimer = () => {
    * Determina el siguiente modo del timer
    */
   const getNextMode = () => {
-    if (currentMode === 'pomo') {
-      endedPomosRef.current += 1
-      return endedPomosRef.current % longBreakInterval === 0 ? 'long' : 'short'
+    let nextMode = null
+
+    if (lastModeRef.current === 'pomo') {
+      const nextCount = endedPomodoros + 1
+      completePomodoro()
+
+      nextMode = nextCount % longBreakInterval === 0 ? 'long' : 'short'
+    } else {
+      nextMode = 'pomo'
     }
-    return 'pomo'
+
+    if (lastModeRef.current === 'long') resetPomodoroCount()
+
+    return nextMode
   }
 
-  /**
-   * Inicia el timer
-   */
+  // Inicia el timer
   const start = () => {
     if (!isRunning) updateIsRunning(true)
   }
 
-  // Pausa el timer (Manual)
+  // Pausa el timer
   const pause = () => {
     console.log('Timer paused')
     updateIsRunning(false, true)
@@ -121,11 +122,10 @@ export const useTimer = () => {
   // Finaliza el timer y cambia el modo actual
   const end = () => {
     if (hasEndedRef.current) return
-
-    console.log('Timer ended')
-    hasEndedRef.current = true
-
     updateIsRunning(false)
+    hasEndedRef.current = true
+    lastModeRef.current = currentMode
+
     notify(currentMode, notification)
 
     setTimeout(() => {

@@ -22,7 +22,8 @@ html {
 
 body, #root, main {
   height: 100%;
-  overflow: hidden; // [ ]: Arreglar para que ocupe solo el 100% de la pantalla
+  // [ ]: Arreglar para que ocupe solo el 100% de la pantalla
+  overflow: hidden; 
 }
 
 // Estilos predefinidos

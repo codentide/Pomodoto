@@ -9,9 +9,8 @@ export const PomoTabs = () => {
   const handleClick = (event) => {
     if (isRunning) {
       const isConfirmed = window.confirm(
-        '¿Estás seguro de que deseas continuar?'
+        'Estás seguro de que deseas continuar?'
       )
-
       if (!isConfirmed) return
     }
 

@@ -80,35 +80,56 @@ main{
   form{
     display: flex;
     flex-direction: column;
-    gap: 1.8rem;
+    gap: 2rem;
+    
+    min-width: 24rem;
+    width: 60%;
+    max-width: 36rem;
+    
+    fieldset{
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
 
-    width: 28rem;
-
-    button{
-      @include button-styles($wh-200, $bl-300, none);
-
-      font-family: inherit;
-      font-size: .9rem;
-      font-weight: 500;
-      text-transform: capitalize;
-
-      margin-top: 1rem;
-
-      padding: .65rem 0 .5rem;
-
-      &:hover{
-        filter: brightness(.9);
-      }
+      padding: 0;
+      border: none;
     }
+
+    legend{
+      font-family: $font-primary;
+      font-size: .8rem;
+      letter-spacing: .05rem;
+
+      margin-bottom: 1.6rem;
+
+      color: $wh-500;
+    }
+
+    // button{
+    //   @include button-styles($wh-200, $bl-300, none);
+
+    //   font-family: inherit;
+    //   font-size: .9rem;
+    //   font-weight: 500;
+    //   text-transform: capitalize;
+
+    //   margin-top: 1rem;
+
+    //   padding: .65rem 0 .5rem;
+
+    //   &:hover{
+    //     filter: brightness(.9);
+    //   }
+    // }
 
     hr{
       height: 1px;
       border-radius: .4rem;
 
-      margin: .8rem 0;
+      margin: 0;
 
       border: none;
-      background-color: $bl-200;
+      background-color: $bl-100;
     }
   }
 

@@ -1,0 +1,124 @@
+@use '../../../scss/variables' as *;
+
+.select {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__label {
+    font-size: 0.9rem;
+  }
+
+  &__button{
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    inline-size: 100%;
+
+    padding: .64rem ;
+    padding-left: .8rem;
+    border-radius: .52rem;
+    border: none;
+
+    font-family: $font-primary;
+    font-size: 0.9rem;
+
+    cursor: pointer;
+
+    background-color: $bl-100;
+
+    // focus
+    &[data-focus-visible] {
+      outline: 1px solid green;
+      outline-offset: -1px;
+    }
+
+  }
+
+  &__value {
+    &[data-placeholder] {
+      // font-style: italic;
+      color: $bl-300;
+    }
+  }
+
+  span[aria-hidden]{
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+
+    forced-color-adjust: none;
+
+    svg{
+      display: grid;
+      place-items: center;
+
+      aspect-ratio: 1;
+      width: 1rem;
+
+      path{
+        fill: $wh-100;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  // 
+
+  &__popover[data-trigger=Select] {
+    position: fixed;
+    
+    min-width: var(--trigger-width);
+    border-radius: .64rem;
+    border: 1px solid $bl-200;
+
+    backdrop-filter: blur(.4rem);
+    overflow: hidden;
+
+    .listbox {
+      display: flex;
+      flex-direction: column;
+
+      width: unset;
+      max-height: inherit;
+      min-height: unset;
+      border: none;
+  
+      &__item {
+        padding: .6rem .8rem;
+
+        border-bottom: 1px solid $bl-200;
+        background-color: hsla(0, 0%, 6%, .9);
+
+        cursor: pointer;
+
+        &:last-child{
+          border: none;
+        }
+
+        &[data-focus-visible] {
+          outline: none;
+        }
+
+        &[data-focused],
+        &[data-pressed] {
+          background-color: hsla(0, 0%, 12%, .9);
+
+        }
+      }
+    }
+  }
+
+  transition: opacity .4s ease;
+
+  &[data-disabled] {
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+}

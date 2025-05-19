@@ -5,11 +5,11 @@ import { PageProvider, PomodoroProvider } from './context'
 import './scss/index.scss'
 
 createRoot(document.getElementById('root')).render(
-  <PageProvider>
-    <PomodoroProvider>
-      <StrictMode>
+  <StrictMode>
+    <PageProvider>
+      <PomodoroProvider>
         <App />
-      </StrictMode>
-    </PomodoroProvider>
-  </PageProvider>
+      </PomodoroProvider>
+    </PageProvider>
+  </StrictMode>
 )

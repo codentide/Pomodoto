@@ -14,10 +14,11 @@ export function Range({
   range = '0-100',
   step = 1,
   unit = '',
-  onChange
+  onChange,
+  disabled = false
 }) {
   function handleChange(value) {
-    onChange(name, value)
+    onChange(value, name)
   }
 
   const [min, max] = range.split('-').map(Number)
@@ -32,10 +33,10 @@ export function Range({
       step={step}
       onChange={handleChange}
       className="range"
+      isDisabled={disabled}
     >
       <div className="range__header">
         <Label className="range__label">{label}</Label>
-        {/* <SliderOutput className="range__output" /> */}
       </div>
       <SliderTrack className="range__track-wrapper">
         {({ state }) => (

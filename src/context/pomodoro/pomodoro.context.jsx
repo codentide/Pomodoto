@@ -6,25 +6,25 @@ export const PomodoroContext = createContext(null)
 export const PomodoroProvider = ({ children }) => {
   const [settings, setSettings] = useState({
     sessionValues: {
-      pomo: 1500,
-      long: 900,
-      short: 300
+      pomo: 4,
+      long: 3,
+      short: 2
     },
     autoStartBreak: true,
-    autoStartPomodoro: true,
-    longBreakInterval: 3,
+    autoStartPomodoro: false,
+    longBreakInterval: 2,
     notification: {
       isActive: true,
       sound: {
         isActive: true,
         track: 'retro-game',
-        volume: 100
+        volume: 50
       }
     },
     ticking: {
       isActive: false,
-      track: 'default',
-      volume: 100
+      track: 'tick',
+      volume: 75
     }
   })
 
@@ -32,6 +32,7 @@ export const PomodoroProvider = ({ children }) => {
   const [timeLeft, setTimeLeft] = useState(settings.sessionValues[currentMode])
   const [isRunning, setIsRunning] = useState(false)
   const [userInterrupted, setUserInterrupted] = useState(false)
+  const [endedPomodoros, setEndedPomodoros] = useState(0)
 
   //
 
@@ -85,6 +86,18 @@ export const PomodoroProvider = ({ children }) => {
     setUserInterrupted(value)
   }
 
+  const updateEndedPomodoros = (value) => {
+    setEndedPomodoros(value)
+  }
+
+  const completePomodoro = () => {
+    setEndedPomodoros((prev) => prev + 1)
+  }
+
+  const resetPomodoroCount = () => {
+    setEndedPomodoros(0)
+  }
+
   return (
     <PomodoroContext.Provider
       value={{
@@ -97,7 +110,11 @@ export const PomodoroProvider = ({ children }) => {
         isRunning,
         updateIsRunning,
         userInterrupted,
-        updateUserInterrupted
+        updateUserInterrupted,
+        endedPomodoros,
+        updateEndedPomodoros,
+        completePomodoro,
+        resetPomodoroCount
       }}
     >
       {children}
