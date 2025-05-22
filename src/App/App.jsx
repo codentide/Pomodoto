@@ -18,6 +18,14 @@ export function App() {
 
   useEffect(() => {
     requestNotificationPermission()
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        console.log('Pestaña oculta')
+      } else {
+        console.log('Pestaña activa de nuevo')
+      }
+    })
   }, [])
 
   return (

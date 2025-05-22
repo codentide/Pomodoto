@@ -93,6 +93,20 @@
       font-size: 0.9rem;
     }
 
+    .min-value{
+      display: flex;
+      justify-content: start;
+
+      width: 2.8rem;
+    }
+
+    .max-value{
+      display: flex;
+      justify-content: end;
+
+      width: 2.8rem;
+    }
+
     .current-value{
       display: flex;
       align-items: center;
@@ -109,8 +123,6 @@
       background-color: $bl-200;
     }
   }
-
-
 
   &[data-disabled] {
     opacity: 0.2;

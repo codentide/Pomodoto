@@ -7,7 +7,7 @@ import './PomoTimer.scss'
 
 export const PomoTimer = () => {
   const { timeLeft, settings, endedPomodoros } = useContext(PomodoroContext)
-  const { start, pause, stop } = useTimer()
+  const { startTimer, pauseTimer, stopTimer } = useTimer()
 
   // [ ]: Añadir botón para forzar la siguiente sesión (next)
   // [ ]: Colocar iconos (play / pause - stop - next) en los botones
@@ -16,11 +16,10 @@ export const PomoTimer = () => {
     <div className="pomo-timer">
       <PomoTabs />
       <p className="pomo-timer__time">{secondsToTime(timeLeft)}</p>
-
       <div className="pomo-timer__controls">
-        <button onClick={start}>start</button>
-        <button onClick={pause}>pause</button>
-        <button onClick={stop}>stop</button>
+        <button onClick={startTimer}>start</button>
+        <button onClick={pauseTimer}>pause</button>
+        <button onClick={stopTimer}>stop</button>
       </div>
       <br />
       <small>

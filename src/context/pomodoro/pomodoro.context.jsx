@@ -4,6 +4,8 @@ import { useState, createContext } from 'react'
 export const PomodoroContext = createContext(null)
 
 export const PomodoroProvider = ({ children }) => {
+  // [ ]: Crear un contexto exclusivo para configuraciones
+  // [ ]: Guardar por defecto, cambios en las configuraciones en localStorage
   const [settings, setSettings] = useState({
     sessionValues: {
       pomo: 4,
@@ -11,13 +13,13 @@ export const PomodoroProvider = ({ children }) => {
       short: 2
     },
     autoStartBreak: true,
-    autoStartPomodoro: false,
+    autoStartPomodoro: true,
     longBreakInterval: 2,
     notification: {
       isActive: true,
       sound: {
         isActive: true,
-        track: 'retro-game',
+        track: 'soft-bell',
         volume: 50
       }
     },
@@ -33,12 +35,6 @@ export const PomodoroProvider = ({ children }) => {
   const [isRunning, setIsRunning] = useState(false)
   const [userInterrupted, setUserInterrupted] = useState(false)
   const [endedPomodoros, setEndedPomodoros] = useState(0)
-
-  //
-
-  useEffect(() => {
-    setTimeLeft(settings.sessionValues[currentMode])
-  }, [currentMode, settings.sessionValues])
 
   //
 
@@ -66,7 +62,6 @@ export const PomodoroProvider = ({ children }) => {
    * Actualiza el modo actual del temporizador.
    * @param {'pomo' | 'short' | 'long'} value - Nuevo modo.
    * @param {boolean} [isManually=false] - Indica si fue un cambio manual.
-   * @returns {void}
    */
   const updateCurrentMode = (value, isManually = false) => {
     setCurrentMode(value)

@@ -1,12 +1,4 @@
-import {
-  Select as AriaSelect,
-  Label,
-  Button,
-  Popover,
-  SelectValue,
-  ListBox,
-  ListBoxItem
-} from 'react-aria-components'
+import { Select as AriaSelect, Label, Button, Popover, SelectValue, ListBox, ListBoxItem } from 'react-aria-components'
 import './Select.scss'
 import { useState, useRef, useEffect } from 'react'
 

@@ -3,30 +3,24 @@ import { PomodoroContext } from '../../../context'
 import './PomoTabs.scss'
 
 export const PomoTabs = () => {
-  const { currentMode, updateCurrentMode, isRunning } =
-    useContext(PomodoroContext)
+  const { currentMode, updateCurrentMode, isRunning, updateIsRunning } = useContext(PomodoroContext)
 
   const handleClick = (event) => {
-    if (isRunning) {
-      const isConfirmed = window.confirm(
-        'Estás seguro de que deseas continuar?'
-      )
-      if (!isConfirmed) return
-    }
-
     const button = event.target
     const mode = button.getAttribute('data-tab')
+
+    // [ ]: Crear dialog propio para manejar esto con mejor ui
+    if (isRunning) {
+      const isConfirmed = window.confirm('Si cambias ahora, se perderá el progreso de la sesión actual, estas seguro?')
+      if (!isConfirmed) return
+    }
 
     updateCurrentMode(mode, true)
   }
 
   return (
     <div className="tab-box">
-      <button
-        className={`tab-box__button ${currentMode === 'pomo' && 'active'}`}
-        onClick={handleClick}
-        data-tab="pomo"
-      >
+      <button className={`tab-box__button ${currentMode === 'pomo' && 'active'}`} onClick={handleClick} data-tab="pomo">
         Pomodoro
       </button>
       <button
@@ -36,11 +30,7 @@ export const PomoTabs = () => {
       >
         Short Break
       </button>
-      <button
-        className={`tab-box__button ${currentMode === 'long' && 'active'}`}
-        onClick={handleClick}
-        data-tab="long"
-      >
+      <button className={`tab-box__button ${currentMode === 'long' && 'active'}`} onClick={handleClick} data-tab="long">
         Long Break
       </button>
     </div>

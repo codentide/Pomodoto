@@ -13,6 +13,16 @@
   border-radius: .52rem;
 
   background-color: $bl-100;
+
+  &[disabled] {
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  &__label {
+    font-size: 0.9rem;
+    color: ghostwhite;
+  }
 }
 
 .switch {
@@ -70,8 +80,7 @@
     }
   }
 
-  &__label {
-    font-size: 0.9rem;
-    color: ghostwhite;
-  }
+
+
+
 }

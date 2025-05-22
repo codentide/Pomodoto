@@ -1,6 +1,7 @@
-import { useContext, useState, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef, useCallback } from 'react'
 import { PomodoroContext } from '../context/pomodoro/pomodoro.context'
 import { notify } from '../tools/notification'
+import { useAlarm } from './useAlarm'
 
 export const useTimer = () => {
   const {
@@ -8,6 +9,7 @@ export const useTimer = () => {
     updateCurrentMode,
     isRunning,
     updateIsRunning,
+    timeLeft,
     updateTimeLeft,
     settings,
     userInterrupted,
@@ -16,127 +18,147 @@ export const useTimer = () => {
     resetPomodoroCount
   } = useContext(PomodoroContext)
 
-  const {
-    sessionValues,
-    notification,
-    longBreakInterval,
-    autoStartBreak,
-    autoStartPomodoro
-  } = settings
+  const { playAlarm } = useAlarm()
+  const { sessionValues, notification, longBreakInterval, autoStartBreak, autoStartPomodoro } = settings
+  const { pomo, short, long } = sessionValues
 
   // Referencias
-  const isFirstRender = useRef(true)
-  const intervalRef = useRef(null)
-  const lastModeRef = useRef(null)
-  const hasEndedRef = useRef(false)
+  const lastCompletedMode = useRef(null)
+  const isTimerEndingRef = useRef(false)
+  const timerWorkerRef = useRef(null)
 
-  useEffect(() => {
-    if (!isRunning) return
-    if (intervalRef.current) return
-    console.log('Timer started')
-
-    // Iniciar nuevo intervalo
-    intervalRef.current = setInterval(() => {
-      updateTimeLeft((prev) => {
-        if (prev <= 1) {
-          end()
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-
-    return () => {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
-      hasEndedRef.current = false
-    }
-  }, [isRunning])
-
-  /*
-   Efecto encargado de: 
-   - Reiniciar el conteo del timer
-   - Valida si los eventos los desata el usuario o el flujo del app
-   - En caso de estar habilitado el autoStart, iniciar el timer
-  */
-  useEffect(() => {
-    if (!isFirstRender.current && !userInterrupted) {
-      updateTimeLeft(sessionValues[currentMode])
-      updateIsRunning(doesAutoStart(currentMode))
-    } else {
-      updateIsRunning(false, userInterrupted)
-    }
-
-    isFirstRender.current = false
-  }, [currentMode, userInterrupted])
-
-  /**
-   *
-   * @param {'pomo' | 'short' | 'long'} mode - Modo actual
-   * @returns {boolean} Determina si el timer inicia automaticamente
-   */
-  const doesAutoStart = (mode) => {
-    return mode === 'pomo' ? autoStartPomodoro : autoStartBreak
+  // Worker
+  function sendWorkerMessage(type) {
+    if (timerWorkerRef.current) timerWorkerRef.current.postMessage({ type })
   }
 
-  /**
-   * Determina el siguiente modo del timer
-   */
-  const getNextMode = () => {
+  const determineNextMode = useCallback(() => {
     let nextMode = null
 
-    if (lastModeRef.current === 'pomo') {
+    if (lastCompletedMode.current === 'pomo') {
       const nextCount = endedPomodoros + 1
       completePomodoro()
-
       nextMode = nextCount % longBreakInterval === 0 ? 'long' : 'short'
     } else {
       nextMode = 'pomo'
     }
 
-    if (lastModeRef.current === 'long') resetPomodoroCount()
+    if (lastCompletedMode.current === 'long') {
+      resetPomodoroCount()
+    }
+
+    // Controlando desfase por cambio de sesión del usuario
+    if (endedPomodoros + 1 > longBreakInterval) {
+      resetPomodoroCount()
+      completePomodoro()
+    }
 
     return nextMode
-  }
+  }, [endedPomodoros, longBreakInterval, completePomodoro, resetPomodoroCount])
 
   // Inicia el timer
-  const start = () => {
-    if (!isRunning) updateIsRunning(true)
+  const startTimer = () => {
+    updateIsRunning(true)
   }
 
   // Pausa el timer
-  const pause = () => {
-    console.log('Timer paused')
+  const pauseTimer = () => {
     updateIsRunning(false, true)
   }
 
-  /**
-   * Detiene el timer y reinicia el tiempo restante al valor de la sesión actual
-   */
-  const stop = () => {
-    console.log('Timer stopped')
+  // Detiene el timer y reinicia el tiempo restante al valor de la sesión actual
+  const stopTimer = () => {
     updateIsRunning(false, true)
-    updateTimeLeft(sessionValues[currentMode])
+    sendWorkerMessage('reset')
   }
 
   // Finaliza el timer y cambia el modo actual
-  const end = () => {
-    if (hasEndedRef.current) return
-    updateIsRunning(false)
-    hasEndedRef.current = true
-    lastModeRef.current = currentMode
+  const handleSessionEnd = () => {
+    if (!isTimerEndingRef.current) return
 
+    updateIsRunning(false)
+
+    isTimerEndingRef.current = true
+    lastCompletedMode.current = currentMode
     notify(currentMode, notification)
+    playAlarm()
 
     setTimeout(() => {
-      updateCurrentMode(getNextMode())
+      updateCurrentMode(determineNextMode())
+      isTimerEndingRef.current = false
     }, 1000)
   }
 
+  // Efectos
+  useEffect(() => {
+    // Worker no soportado por el navegador
+    if (!window.Worker) {
+      console.warn('Su navegador no soporta Web Workers. El temporizador puede no ser preciso.')
+      return
+    }
+
+    // Si el worker existe no se vuelve a crear
+    if (timerWorkerRef.current) return
+
+    try {
+      timerWorkerRef.current = new Worker(new URL('../timeWorker.js', import.meta.url))
+      timerWorkerRef.current.onmessage = ({ data }) => {
+        const { type, payload } = data
+        if (type === 'timeUpdate') {
+          const elapsedTime = payload
+          const currentModeTimeMs = sessionValues[currentMode] * 1000
+          const remainingTimeMs = Math.max(0, currentModeTimeMs - elapsedTime)
+          updateTimeLeft(Math.ceil(remainingTimeMs / 1000))
+        } else if (type === 'sessionEnd') {
+          isTimerEndingRef.current = true
+        }
+      }
+
+      timerWorkerRef.current.onerror = (error) => {
+        console.error('Error en el Web Worker:', error)
+      }
+
+      // Cuando un cambio se desata en currenMode, o en session values
+      // mientras isrunning es true este se queda en true y no permite
+      // reanudar hasta que se pause manualmente este es el fix
+      pauseTimer()
+    } catch (error) {
+      console.error('useTimer: No se pudo crear el Web Worker:', error)
+    }
+
+    return () => {
+      if (timerWorkerRef.current) {
+        timerWorkerRef.current.terminate()
+        timerWorkerRef.current = null
+      }
+    }
+  }, [currentMode, pomo, short, long])
+
+  useEffect(() => {
+    if (isRunning && timeLeft <= 0 && isTimerEndingRef.current) {
+      handleSessionEnd()
+    }
+  }, [timeLeft])
+
+  useEffect(() => {
+    const currentDuration = sessionValues[currentMode]
+    timerWorkerRef.current?.postMessage({ type: 'setDuration', payload: currentDuration })
+    sendWorkerMessage('reset')
+
+    if (!userInterrupted && lastCompletedMode.current !== null) {
+      const shouldAutoStart = currentMode === 'pomo' ? autoStartPomodoro : autoStartBreak
+      updateIsRunning(shouldAutoStart)
+    }
+  }, [currentMode])
+
+  useEffect(() => {
+    console.log('oe', isRunning)
+    sendWorkerMessage(isRunning ? 'start' : 'pause')
+  }, [isRunning])
+
   return {
-    start,
-    pause,
-    stop,
-    end
+    startTimer,
+    pauseTimer,
+    stopTimer
   }
 }

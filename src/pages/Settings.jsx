@@ -1,29 +1,46 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { PomodoroContext } from '../context'
 import { Range, Switch, Select } from '../components'
 import { minutesToSeconds, secondsToMinutes } from '../tools'
+import { alarmTracks, tickingTracks } from '../constants/tracks'
+import { useAlarm } from '../hooks/useAlarm'
 
-const alarmTracks = [
-  { value: 'retro-game', label: 'Retro Game' }
-  // { value: 'digital-beep', label: 'Digital Beep' },
-  // { value: 'soft-bell', label: 'Soft Bell' },
-  // { value: 'zen-gong', label: 'Zen Gong' }
-]
-
-const tickingTracks = [
-  { value: 'tick', label: 'Tick' },
-  { value: 'bell', label: 'Campana' },
-  { value: 'soft-ding', label: 'Ding suave' }
-]
+// [ ]: Si la persona niega el recibir notificaciones el switch de notificaciones se deberá apagar
+// [ ]: Si la persona tiene negadas las notificaciones y prender el switch de notificaciones
+// [x]: Cuando se cambie un sonido reproducirlo
 
 export function Settings({ className }) {
-  const { settings, updateSettings, updateIsRunning } =
-    useContext(PomodoroContext)
-  const { sessionValues } = settings
+  const { playAlarm, stopAlarm } = useAlarm()
+  const { settings, updateSettings } = useContext(PomodoroContext)
+  const { sessionValues, notification } = settings
+  const { track, volume } = notification.sound
+
+  const debounceTimeoutRef = useRef(null)
+
+  useEffect(() => {
+    playAlarm()
+
+    return () => {
+      stopAlarm()
+    }
+  }, [track])
+
+  useEffect(() => {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current)
+    }
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      playAlarm(track, volume)
+    }, 100)
+
+    return () => {
+      stopAlarm()
+      if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current)
+    }
+  }, [volume])
 
   const onInputChange = (value, name, type) => {
-    updateIsRunning(false, true)
-
     switch (type) {
       case 'minute':
         updateSettings(name, minutesToSeconds(value))
@@ -42,19 +59,15 @@ export function Settings({ className }) {
 
   return (
     <section className={`settings ${className}`}>
-      <div className="heading">
-        <h2>Settings</h2>
-      </div>
       <form>
         <fieldset>
-          <legend>Temporizador</legend>
-
+          <legend>Pomodoro</legend>
           <Range
             name="sessionValues.pomo"
-            label="Pomo duration"
-            defaultValue={secondsToMinutes(sessionValues.pomo)}
+            label="Pomodoro duration"
             range="5-60"
             unit="min"
+            defaultValue={secondsToMinutes(sessionValues.pomo)}
             onChange={(value, name) => onInputChange(value, name, 'minute')}
           />
           <Range
@@ -82,72 +95,52 @@ export function Settings({ className }) {
             onChange={(value, name) => onInputChange(value, name, 'number')}
           />
         </fieldset>
-
         <hr />
-
         <fieldset>
-          <legend>Comportamiento Automatico</legend>
-          <Switch
-            name="autoStartBreak"
-            label="Auto start breaks"
-            defaultValue={settings.autoStartBreak}
-            onChange={(value, name) => onInputChange(value, name, 'boolean')}
-          />
-          <Switch
-            name="autoStartPomodoro"
-            label="Auto start pomodoros"
-            defaultValue={settings.autoStartPomodoro}
-            onChange={(value, name) => onInputChange(value, name, 'boolean')}
-          />
+          <legend>Auto Start</legend>
+          <div style={{ display: 'flex', gap: '2rem', width: '100%' }}>
+            <Switch
+              name="autoStartPomodoro"
+              label="Pomodoro"
+              defaultValue={settings.autoStartPomodoro}
+              onChange={(value, name) => onInputChange(value, name, 'boolean')}
+            />
+            <Switch
+              name="autoStartBreak"
+              label="Break"
+              defaultValue={settings.autoStartBreak}
+              onChange={(value, name) => onInputChange(value, name, 'boolean')}
+            />
+          </div>
         </fieldset>
-
         <hr />
-
         <fieldset>
-          <legend>Notificaciones</legend>
-
+          <legend>Notifications</legend>
           <div style={{ display: 'flex', gap: '2rem', width: '100%' }}>
             <Switch
               name="notification.isActive"
-              label="Active notifications"
+              label="Active"
               defaultValue={settings.notification.isActive}
               onChange={(value, name) => onInputChange(value, name, 'boolean')}
             ></Switch>
             <Switch
               name="notification.sound.isActive"
-              label="Notification sound"
+              label="Sound"
               defaultValue={settings.notification.sound.isActive}
               onChange={(value, name) => onInputChange(value, name, 'boolean')}
             ></Switch>
           </div>
           <Range
             name="notification.sound.volume"
-            label="Alarm volume"
+            label="Volume"
             range="0-100"
             unit="%"
             disabled={!settings.notification.sound.isActive}
             defaultValue={settings.notification.sound.volume}
             onChange={(value, name) => onInputChange(value, name, 'number')}
           />
-          {/* <select
-            disabled={!settings.notification.sound.isActive}
-            name="notification.sound.track"
-            value={settings.notification.sound.track}
-            onChange={(e) =>
-              onInputChange(
-                e.target.value,
-                'notification.sound.track',
-                'string'
-              )
-            }
-          >
-            <option value="retro-game">Retro Game</option>
-            <option value="bell">Campana</option>
-            <option value="soft-ding">Ding suave</option>
-          </select> */}
-
           <Select
-            label="Alarm tone"
+            label="Track"
             name={'notification.sound.track'}
             items={alarmTracks}
             defaultValue={settings.notification.sound.track}
@@ -160,22 +153,13 @@ export function Settings({ className }) {
 
         <fieldset>
           <legend>Ticking</legend>
-          <div style={{ display: 'flex', gap: '2rem', width: '100%' }}>
-            <Switch
-              name="ticking.isActive"
-              label="Active ticking sound"
-              defaultValue={settings.ticking.isActive}
-              onChange={(value, name) => onInputChange(value, name, 'boolean')}
-            ></Switch>
-          </div>
-          <Select
-            label="Ticking tone"
-            name={'ticking.track'}
-            items={tickingTracks}
-            defaultValue={settings.ticking.track}
-            disabled={!settings.ticking.isActive}
-            onChange={({ value, name }) => onInputChange(value, name, 'string')}
-          ></Select>
+          <Switch
+            name="ticking.isActive"
+            label="Active ticking sound"
+            defaultValue={settings.ticking.isActive}
+            disabled={true}
+            onChange={(value, name) => onInputChange(value, name, 'boolean')}
+          ></Switch>
           <Range
             name="ticking.volume"
             disabled={!settings.ticking.isActive}
@@ -185,6 +169,14 @@ export function Settings({ className }) {
             defaultValue={settings.ticking.volume}
             onChange={(value, name) => onInputChange(value, name, 'number')}
           />
+          <Select
+            label="Ticking tone"
+            name={'ticking.track'}
+            items={tickingTracks}
+            defaultValue={settings.ticking.track}
+            disabled={!settings.ticking.isActive}
+            onChange={({ value, name }) => onInputChange(value, name, 'string')}
+          ></Select>
         </fieldset>
       </form>
     </section>

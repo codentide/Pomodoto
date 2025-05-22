@@ -1,8 +1,34 @@
-export const playAlarm = (track, volume = 100) => {
-  // Buscar el archivo en la carpeta publica
-  const alarm = new Audio(`/audio/${track}.wav`)
-  // Ajustar volumen, quizá no haga falta calcular entre 100
+let currentAlarm = null
+
+let userInteracted = false
+
+window.addEventListener(
+  'DOMContentLoaded',
+  () => {
+    setTimeout(() => {
+      userInteracted = true
+    }, 1000)
+  },
+  { once: true }
+)
+
+const playAlarm = (track, volume = 100) => {
+  if (!userInteracted) {
+    return
+  }
+
+  if (currentAlarm) stopAlarm()
+
+  const alarm = new Audio(`/audio/${track}.mp3`)
   alarm.volume = volume / 100
-  // Reproducir alarma
-  alarm.play()
+  alarm.play().catch((e) => console.warn('Error al reproducir audio:', e))
+  currentAlarm = alarm
+}
+
+const stopAlarm = () => {
+  if (currentAlarm) {
+    currentAlarm.pause()
+    currentAlarm.currentTime = 0
+    currentAlarm = null
+  }
 }
