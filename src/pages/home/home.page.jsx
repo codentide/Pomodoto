@@ -1,4 +1,4 @@
-import { Pomolist, PomoTimer } from '../components'
+import { Pomolist, PomoTimer } from '../../components'
 
 export function Home({ className }) {
   return (

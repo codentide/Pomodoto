@@ -1,2 +1,3 @@
-export * from "./pomodoro/pomodoro.context"
-export * from "./page/page.context"
+export * from './pomodoro.context.jsx'
+export * from './page.context.jsx'
+export * from './settings.context.jsx'

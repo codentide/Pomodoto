@@ -1,8 +1,8 @@
 import { useContext, useRef, useCallback, useEffect } from 'react'
-import { PomodoroContext } from '../context'
+import { SettingsContext } from '../context'
 
 export const useAlarm = () => {
-  const { settings } = useContext(PomodoroContext)
+  const { settings } = useContext(SettingsContext)
   const { isActive, track, volume } = settings.notification.sound
 
   const currentAudioInstanceRef = useRef(null)

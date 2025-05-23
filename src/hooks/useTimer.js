@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useCallback } from 'react'
-import { PomodoroContext } from '../context/pomodoro/pomodoro.context'
+import { SettingsContext, PomodoroContext } from '../context'
 import { notify } from '../tools/notification'
 import { useAlarm } from './useAlarm'
 
@@ -11,16 +11,16 @@ export const useTimer = () => {
     updateIsRunning,
     timeLeft,
     updateTimeLeft,
-    settings,
     userInterrupted,
     endedPomodoros,
     completePomodoro,
     resetPomodoroCount
   } = useContext(PomodoroContext)
 
-  const { playAlarm } = useAlarm()
+  const { settings } = useContext(SettingsContext)
   const { sessionValues, notification, longBreakInterval, autoStartBreak, autoStartPomodoro } = settings
   const { pomo, short, long } = sessionValues
+  const { playAlarm } = useAlarm()
 
   // Referencias
   const lastCompletedMode = useRef(null)
@@ -48,10 +48,11 @@ export const useTimer = () => {
     }
 
     // Controlando desfase por cambio de sesión del usuario
-    if (endedPomodoros + 1 > longBreakInterval) {
-      resetPomodoroCount()
-      completePomodoro()
-    }
+    // [ ]: Cuando esta 2 of 2 y termina el longBreak añade 1 apenas inicia el pomodoro (suma erróneamente 1 pomodoro)
+    // if (endedPomodoros + 1 > longBreakInterval) {
+    //   resetPomodoroCount()
+    //   completePomodoro()
+    // }
 
     return nextMode
   }, [endedPomodoros, longBreakInterval, completePomodoro, resetPomodoroCount])
@@ -152,7 +153,6 @@ export const useTimer = () => {
   }, [currentMode])
 
   useEffect(() => {
-    console.log('oe', isRunning)
     sendWorkerMessage(isRunning ? 'start' : 'pause')
   }, [isRunning])
 

@@ -25,7 +25,7 @@ $wh-400: hsl(0, 0%, 60%);
 $wh-500: hsl(0, 0%, 50%);
 
 // Black
-$bl-100: hsl(0, 0%, 8%);
+$bl-100: hsl(0, 0%, 10%);
 $bl-200: hsl(0, 0%, 16%);
 $bl-300: hsl(0, 0%, 24%);
 $bl-400: hsl(0, 0%, 32%);
@@ -37,8 +37,8 @@ $font-size-base: 16px;
 // Font Families
 $font-primary: 'Rubik', sans-serif;
 
-// Global 
-$sidebar-gap: .8rem;
+// Global
+$sidebar-gap: 0.8rem;
 $sidebar-width: calc(12rem + $sidebar-gap);
 
 // Mixins
@@ -46,18 +46,16 @@ $sidebar-width: calc(12rem + $sidebar-gap);
   display: inline-grid;
   place-items: center;
 
-  padding: .36rem 1.2rem;
+  padding: 0.36rem 1.2rem;
   border: $border;
-  border-radius: .4rem;
+  border-radius: 0.4rem;
 
   text-decoration: none;
   white-space: nowrap;
-  
+
   color: $text-color;
   background-color: $bg-color;
-  
+
   transition: all 0.3s ease;
   cursor: pointer;
 }
-
-

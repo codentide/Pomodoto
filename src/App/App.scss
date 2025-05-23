@@ -54,85 +54,8 @@ main{
   display: none;
 }
 
-// [ ]: Migrar Settings a su propio hoja de estilos
+// [x]: Migrar Settings a su propio hoja de estilos
 
-.settings{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
 
-  .heading{
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    width: 100%;
-
-    h2{
-      font-size: .9rem;
-      font-weight: 400;
-      letter-spacing: .075rem;
-      color: $wh-500;
-    }
-    
-  }
-
-  form{
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    
-    min-width: 24rem;
-    width: 60%;
-    max-width: 36rem;
-    
-    fieldset{
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-
-      padding: 0;
-      border: none;
-    }
-
-    legend{
-      font-family: $font-primary;
-      font-size: .8rem;
-      letter-spacing: .05rem;
-
-      margin-bottom: 1.6rem;
-
-      color: $wh-500;
-    }
-
-    // button{
-    //   @include button-styles($wh-200, $bl-300, none);
-
-    //   font-family: inherit;
-    //   font-size: .9rem;
-    //   font-weight: 500;
-    //   text-transform: capitalize;
-
-    //   margin-top: 1rem;
-
-    //   padding: .65rem 0 .5rem;
-
-    //   &:hover{
-    //     filter: brightness(.9);
-    //   }
-    // }
-
-    hr{
-      height: 1px;
-      border-radius: .4rem;
-
-      margin: 0;
-
-      border: none;
-      background-color: $bl-100;
-    }
-  }
-
-}
 
   

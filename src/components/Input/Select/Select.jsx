@@ -8,7 +8,7 @@ export function Select({
   placeholder = 'Choose an option',
   items = [],
   disabled,
-  defaultValue,
+  value,
   onChange = (value) => console.log(value)
 }) {
   // HACK: Porque el componente bloquea el scroll del body, buscarle solucion
@@ -36,8 +36,8 @@ export function Select({
     <AriaSelect
       className="select"
       name={name}
+      selectedKey={value}
       placeholder={placeholder}
-      defaultSelectedKey={defaultValue}
       isDisabled={disabled}
       isOpen={isOpen}
       onOpenChange={setIsOpen}

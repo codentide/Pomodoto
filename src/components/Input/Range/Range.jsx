@@ -1,16 +1,11 @@
-import {
-  Label,
-  Slider,
-  SliderOutput,
-  SliderThumb,
-  SliderTrack
-} from 'react-aria-components'
+import { Label, Slider, SliderOutput, SliderThumb, SliderTrack } from 'react-aria-components'
 import './Range.scss'
 
 export function Range({
   name,
   label = 'Label',
-  defaultValue = false,
+  value = false,
+  defaultValue = null,
   range = '0-100',
   step = 1,
   unit = '',
@@ -27,7 +22,7 @@ export function Range({
   return (
     <Slider
       name={name}
-      defaultValue={defaultValue}
+      value={value}
       minValue={min}
       maxValue={max}
       step={step}
@@ -42,10 +37,7 @@ export function Range({
         {({ state }) => (
           <>
             <div className="range__track-bg" />
-            <div
-              className="range__track-fill"
-              style={{ width: `${state.getThumbPercent(0) * 100}%` }}
-            />
+            <div className="range__track-fill" style={{ width: `${state.getThumbPercent(0) * 100}%` }} />
             <SliderThumb className="range__thumb" />
           </>
         )}

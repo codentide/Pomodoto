@@ -1,17 +1,22 @@
 import { useContext, useEffect, useRef } from 'react'
-import { PomodoroContext } from '../context'
-import { Range, Switch, Select } from '../components'
-import { minutesToSeconds, secondsToMinutes } from '../tools'
-import { alarmTracks, tickingTracks } from '../constants/tracks'
-import { useAlarm } from '../hooks/useAlarm'
+import { SettingsContext } from '../../context'
+import { Range, Switch, Select } from '../../components'
+import { minutesToSeconds, secondsToMinutes } from '../../tools'
+import { alarmTracks, tickingTracks } from '../../constants/tracks'
+import { useAlarm } from '../../hooks/useAlarm'
+
+import './settings.page.scss'
+
+import resetIcon from '../../assets/svg/reset.svg'
 
 // [ ]: Si la persona niega el recibir notificaciones el switch de notificaciones se deberá apagar
 // [ ]: Si la persona tiene negadas las notificaciones y prender el switch de notificaciones
 // [x]: Cuando se cambie un sonido reproducirlo
+// [ ]: Cuando se hace reset en settings para que vuelva a sus antiguos valores no cambian los valores de los inputs (no desata un render)
 
 export function Settings({ className }) {
   const { playAlarm, stopAlarm } = useAlarm()
-  const { settings, updateSettings } = useContext(PomodoroContext)
+  const { settings, updateSettings, resetSettings } = useContext(SettingsContext)
   const { sessionValues, notification } = settings
   const { track, volume } = notification.sound
 
@@ -19,10 +24,7 @@ export function Settings({ className }) {
 
   useEffect(() => {
     playAlarm()
-
-    return () => {
-      stopAlarm()
-    }
+    return () => stopAlarm()
   }, [track])
 
   useEffect(() => {
@@ -57,9 +59,13 @@ export function Settings({ className }) {
     }
   }
 
+  function handleSubmit(event) {
+    event.preventDefault()
+  }
+
   return (
     <section className={`settings ${className}`}>
-      <form>
+      <form onSubmit={handleSubmit}>
         <fieldset>
           <legend>Pomodoro</legend>
           <Range
@@ -67,7 +73,7 @@ export function Settings({ className }) {
             label="Pomodoro duration"
             range="5-60"
             unit="min"
-            defaultValue={secondsToMinutes(sessionValues.pomo)}
+            value={secondsToMinutes(sessionValues.pomo)}
             onChange={(value, name) => onInputChange(value, name, 'minute')}
           />
           <Range
@@ -75,7 +81,7 @@ export function Settings({ className }) {
             label="Long duration"
             range="5-45"
             unit="min"
-            defaultValue={secondsToMinutes(sessionValues.long)}
+            value={secondsToMinutes(sessionValues.long)}
             onChange={(value, name) => onInputChange(value, name, 'minute')}
           />
           <Range
@@ -83,7 +89,7 @@ export function Settings({ className }) {
             label="Short duration"
             range="1-30"
             unit="min"
-            defaultValue={secondsToMinutes(sessionValues.short)}
+            value={secondsToMinutes(sessionValues.short)}
             onChange={(value, name) => onInputChange(value, name, 'minute')}
           />
           <Range
@@ -91,7 +97,7 @@ export function Settings({ className }) {
             label="Long break interval"
             range="2-10"
             unit="rnd"
-            defaultValue={settings.longBreakInterval}
+            value={settings.longBreakInterval}
             onChange={(value, name) => onInputChange(value, name, 'number')}
           />
         </fieldset>
@@ -102,13 +108,13 @@ export function Settings({ className }) {
             <Switch
               name="autoStartPomodoro"
               label="Pomodoro"
-              defaultValue={settings.autoStartPomodoro}
+              value={settings.autoStartPomodoro}
               onChange={(value, name) => onInputChange(value, name, 'boolean')}
             />
             <Switch
               name="autoStartBreak"
               label="Break"
-              defaultValue={settings.autoStartBreak}
+              value={settings.autoStartBreak}
               onChange={(value, name) => onInputChange(value, name, 'boolean')}
             />
           </div>
@@ -120,13 +126,13 @@ export function Settings({ className }) {
             <Switch
               name="notification.isActive"
               label="Active"
-              defaultValue={settings.notification.isActive}
+              value={settings.notification.isActive}
               onChange={(value, name) => onInputChange(value, name, 'boolean')}
             ></Switch>
             <Switch
               name="notification.sound.isActive"
               label="Sound"
-              defaultValue={settings.notification.sound.isActive}
+              value={settings.notification.sound.isActive}
               onChange={(value, name) => onInputChange(value, name, 'boolean')}
             ></Switch>
           </div>
@@ -136,14 +142,14 @@ export function Settings({ className }) {
             range="0-100"
             unit="%"
             disabled={!settings.notification.sound.isActive}
-            defaultValue={settings.notification.sound.volume}
+            value={settings.notification.sound.volume}
             onChange={(value, name) => onInputChange(value, name, 'number')}
           />
           <Select
             label="Track"
             name={'notification.sound.track'}
             items={alarmTracks}
-            defaultValue={settings.notification.sound.track}
+            value={settings.notification.sound.track}
             disabled={!settings.notification.sound.isActive}
             onChange={({ value, name }) => onInputChange(value, name, 'string')}
           ></Select>
@@ -156,7 +162,7 @@ export function Settings({ className }) {
           <Switch
             name="ticking.isActive"
             label="Active ticking sound"
-            defaultValue={settings.ticking.isActive}
+            value={settings.ticking.isActive}
             disabled={true}
             onChange={(value, name) => onInputChange(value, name, 'boolean')}
           ></Switch>
@@ -166,18 +172,23 @@ export function Settings({ className }) {
             label="Ticking volume"
             range="0-100"
             unit="%"
-            defaultValue={settings.ticking.volume}
+            value={settings.ticking.volume}
             onChange={(value, name) => onInputChange(value, name, 'number')}
           />
           <Select
             label="Ticking tone"
             name={'ticking.track'}
             items={tickingTracks}
-            defaultValue={settings.ticking.track}
+            value={settings.ticking.track}
             disabled={!settings.ticking.isActive}
             onChange={({ value, name }) => onInputChange(value, name, 'string')}
           ></Select>
         </fieldset>
+        <button className="reset-btn" onClick={resetSettings}>
+          <svg viewBox="0 0 24 24">
+            <path d="M1.611,12c.759,0,1.375,.57,1.485,1.32,.641,4.339,4.389,7.68,8.903,7.68,5.476,0,9.827-4.917,8.867-10.569-.453-2.665-2.148-5.023-4.523-6.313-3.506-1.903-7.48-1.253-10.18,1.045l1.13,1.13c.63,.63,.184,1.707-.707,1.707H2c-.552,0-1-.448-1-1V2.414c0-.891,1.077-1.337,1.707-.707l1.332,1.332C7.6-.115,12.921-1.068,17.637,1.408c3.32,1.743,5.664,5.027,6.223,8.735,1.122,7.437-4.633,13.857-11.86,13.857-6.021,0-11.021-4.457-11.872-10.246-.135-.92,.553-1.754,1.483-1.754Z" />
+          </svg>
+        </button>
       </form>
     </section>
   )
