@@ -23,9 +23,9 @@ export function Select({
     const onScroll = () => setIsOpen(false)
     // Añadir evento de scroll al contenedor del select
     const container = buttonRef.current?.closest('section.page')
-    container?.addEventListener('scroll', onScroll, { passive: true })
+    container?.addEventListener('wheel', onScroll, { passive: true })
 
-    return () => container.removeEventListener('scroll', onScroll)
+    return () => container.removeEventListener('wheel', onScroll)
   }, [isOpen])
 
   function handleChange(value) {

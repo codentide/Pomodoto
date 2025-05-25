@@ -19,6 +19,8 @@ function sendSessionEnd() {
   postMessage({
     type: 'sessionEnd'
   })
+
+  console.log('[TIME-WORKER] Session Ended')
 }
 
 function startTimer() {
@@ -38,7 +40,7 @@ function startTimer() {
       pauseTimer()
       sendSessionEnd()
     }
-  }, 100)
+  }, 1000)
 }
 
 function pauseTimer() {
@@ -83,10 +85,10 @@ onmessage = function ({ data }) {
       close()
       break
     default:
-      console.warn('[WORKER] Tipo de mensaje desconocido:', type)
+      console.warn('[TIME-WORKER] Tipo de mensaje desconocido:', type)
   }
 }
 
 // Se envía el tiempo inicial al cargar el worker para que el hook tenga un valor por defecto.
 sendTimeUpdate()
-console.log('[WORKER] Iniciado y esperando mensajes.')
+console.log('[TIME-WORKER] Successfully Created')

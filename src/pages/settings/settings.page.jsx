@@ -7,12 +7,8 @@ import { useAlarm } from '../../hooks/useAlarm'
 
 import './settings.page.scss'
 
-import resetIcon from '../../assets/svg/reset.svg'
-
-// [ ]: Si la persona niega el recibir notificaciones el switch de notificaciones se deberá apagar
-// [ ]: Si la persona tiene negadas las notificaciones y prender el switch de notificaciones
 // [x]: Cuando se cambie un sonido reproducirlo
-// [ ]: Cuando se hace reset en settings para que vuelva a sus antiguos valores no cambian los valores de los inputs (no desata un render)
+// [x]: Cuando se hace reset en settings para que vuelva a sus antiguos valores no cambian los valores de los inputs (no desata un render)
 
 export function Settings({ className }) {
   const { playAlarm, stopAlarm } = useAlarm()
@@ -21,6 +17,8 @@ export function Settings({ className }) {
   const { track, volume } = notification.sound
 
   const debounceTimeoutRef = useRef(null)
+
+  // Efectos para manejar el sonido
 
   useEffect(() => {
     playAlarm()

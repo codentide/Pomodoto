@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useCallback } from 'react'
 import { SettingsContext, PomodoroContext } from '../context'
-import { notify } from '../tools/notification'
+import { endSessionNotify, notify } from '../tools/notification'
 import { useAlarm } from './useAlarm'
 
 export const useTimer = () => {
@@ -24,14 +24,15 @@ export const useTimer = () => {
 
   // Referencias
   const lastCompletedMode = useRef(null)
-  const isTimerEndingRef = useRef(false)
   const timerWorkerRef = useRef(null)
+  const isSessionEndingRef = useRef(false)
 
   // Worker
   function sendWorkerMessage(type) {
     if (timerWorkerRef.current) timerWorkerRef.current.postMessage({ type })
   }
 
+  // Calcula el siguiente modo
   const determineNextMode = useCallback(() => {
     let nextMode = null
 
@@ -74,23 +75,19 @@ export const useTimer = () => {
   }
 
   // Finaliza el timer y cambia el modo actual
-  const handleSessionEnd = () => {
-    if (!isTimerEndingRef.current) return
-
-    updateIsRunning(false)
-
-    isTimerEndingRef.current = true
+  const handleSessionEnd = useCallback(() => {
     lastCompletedMode.current = currentMode
-    notify(currentMode, notification)
+
+    endSessionNotify(currentMode)
     playAlarm()
 
     setTimeout(() => {
+      isSessionEndingRef.current = false
       updateCurrentMode(determineNextMode())
-      isTimerEndingRef.current = false
     }, 1000)
-  }
+  }, [currentMode, notification, determineNextMode, playAlarm])
 
-  // Efectos
+  // Efecto del worker
   useEffect(() => {
     // Worker no soportado por el navegador
     if (!window.Worker) {
@@ -103,6 +100,7 @@ export const useTimer = () => {
 
     try {
       timerWorkerRef.current = new Worker(new URL('../timeWorker.js', import.meta.url))
+      timerWorkerRef.current.postMessage({ type: 'setDuration', payload: sessionValues[currentMode] })
       timerWorkerRef.current.onmessage = ({ data }) => {
         const { type, payload } = data
         if (type === 'timeUpdate') {
@@ -111,7 +109,8 @@ export const useTimer = () => {
           const remainingTimeMs = Math.max(0, currentModeTimeMs - elapsedTime)
           updateTimeLeft(Math.ceil(remainingTimeMs / 1000))
         } else if (type === 'sessionEnd') {
-          isTimerEndingRef.current = true
+          isSessionEndingRef.current = true
+          updateIsRunning(false)
         }
       }
 
@@ -119,12 +118,9 @@ export const useTimer = () => {
         console.error('Error en el Web Worker:', error)
       }
 
-      // Cuando un cambio se desata en currenMode, o en session values
-      // mientras isrunning es true este se queda en true y no permite
-      // reanudar hasta que se pause manualmente este es el fix
-      pauseTimer()
+      if (isRunning) pauseTimer()
     } catch (error) {
-      console.error('useTimer: No se pudo crear el Web Worker:', error)
+      console.error('useTimer: No se pudo crear el TimeWorker:', error)
     }
 
     return () => {
@@ -136,15 +132,9 @@ export const useTimer = () => {
   }, [currentMode, pomo, short, long])
 
   useEffect(() => {
-    if (isRunning && timeLeft <= 0 && isTimerEndingRef.current) {
-      handleSessionEnd()
-    }
-  }, [timeLeft])
-
-  useEffect(() => {
-    const currentDuration = sessionValues[currentMode]
-    timerWorkerRef.current?.postMessage({ type: 'setDuration', payload: currentDuration })
-    sendWorkerMessage('reset')
+    // const currentDuration = sessionValues[currentMode]
+    // timerWorkerRef.current.postMessage({ type: 'setDuration', payload: currentDuration })
+    // sendWorkerMessage('reset')
 
     if (!userInterrupted && lastCompletedMode.current !== null) {
       const shouldAutoStart = currentMode === 'pomo' ? autoStartPomodoro : autoStartBreak
@@ -153,8 +143,12 @@ export const useTimer = () => {
   }, [currentMode])
 
   useEffect(() => {
+    if (isSessionEndingRef.current && !isRunning) {
+      console.log('[END-SESSION-HELPER] End of session request received')
+      handleSessionEnd()
+    }
     sendWorkerMessage(isRunning ? 'start' : 'pause')
-  }, [isRunning])
+  }, [isRunning, handleSessionEnd, notification])
 
   return {
     startTimer,

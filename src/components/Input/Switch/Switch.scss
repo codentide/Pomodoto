@@ -8,9 +8,9 @@
   width: 100%;
 
   gap: 0.75rem;
-  padding: .6rem;
-  padding-left: .8rem;
-  border-radius: .52rem;
+  padding: 0.6rem;
+  padding-left: 0.8rem;
+  border-radius: 0.52rem;
 
   background-color: $bl-100;
 
@@ -23,6 +23,13 @@
     font-size: 0.9rem;
     color: ghostwhite;
   }
+
+  &:focus-within {
+    filter: brightness(1.2) contrast(95%);
+    box-shadow: 0 0 0.8rem hsla(0, 0%, 80%, 0.1);
+  }
+
+  transition: filter 0.4s ease;
 }
 
 .switch {
@@ -31,24 +38,18 @@
   justify-content: space-between;
 
   cursor: auto;
-  transition: filter .4s ease;
-
-  &:focus-within{
-    filter: brightness(1.5);
-  }
 
   &__thumb {
     position: relative;
 
     width: 2.4rem;
     height: 1.4rem;
-    border-radius: .32rem;
+    border-radius: 0.32rem;
 
     background-color: $bl-300;
-    
+
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-
 
     &::before {
       position: absolute;
@@ -58,18 +59,18 @@
 
       width: 1rem;
       height: 1rem;
-      border-radius: .18rem;
+      border-radius: 0.18rem;
 
       background-color: $wh-200;
 
       transform: translate(0, -50%);
-      box-shadow: 0 0 .8rem hsla(0, 0%, 80%, .4);
+      box-shadow: 0 0 0.8rem hsla(0, 0%, 80%, 0.4);
       transition: transform 0.2s ease-in-out;
     }
 
     &[data-selected='true'] {
       background-color: $wh-300;
-      box-shadow: 0 0 .8rem hsla(0, 0%, 80%, .4);
+      box-shadow: 0 0 0.8rem hsla(0, 0%, 80%, 0.4);
 
       &::before {
         background-color: $bl-200;
@@ -79,8 +80,4 @@
       }
     }
   }
-
-
-
-
 }

@@ -1,14 +1,34 @@
-export function notify(currentMode) {
-  if (Notification.permission === 'granted') {
-    new Notification('Tiempo terminado', {
-      body: `Finalizó tu sesión ${currentMode}`,
-      icon: '/favicon.png'
-    })
+export function notify(title, body) {
+  if (Notification.permission !== 'granted') return
+
+  new Notification(title, {
+    icon: '/favicon.png',
+    body: body || ''
+  })
+}
+
+export function endSessionNotify(mode) {
+  let title
+
+  switch (mode) {
+    case 'pomo':
+      title = 'Time for a Break'
+      break
+    case 'short':
+      title = 'Back to Focus'
+      break
+    case 'long':
+      title = 'Long break over'
+      break
   }
+
+  notify(title)
 }
 
 export function requestNotificationPermission() {
-  if (Notification.permission !== 'granted') {
-    Notification.requestPermission()
-  }
+  if (Notification.permission !== 'granted') Notification.requestPermission()
+}
+
+export function getNotificationPermission() {
+  return Notification.permission
 }

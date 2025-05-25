@@ -5,21 +5,23 @@ import { useState, createContext } from 'react'
 // [ ]: Cargar settings del localStorage, si no existe cargar default settings
 
 export const SettingsContext = createContext(null)
-export const SettingsProvider = ({ children }) => {
+export const SettingsProvider = ({ children, isTesting = false }) => {
   const LOCAL_STORAGE_KEY = 'settings'
 
-  const DEFAULT_SESSION_VALUES = {
-    pomo: 25 * 60,
-    long: 15 * 60,
-    short: 5 * 60
-  }
+  const DEFAULT_SESSION_VALUES = isTesting
+    ? {
+        pomo: 10.5 * 60,
+        long: 8,
+        short: 4
+      }
+    : {
+        pomo: 25 * 60,
+        long: 15 * 60,
+        short: 5 * 60
+      }
 
   const DEFAULT_SETTINGS = {
-    sessionValues: {
-      pomo: 4,
-      long: 3,
-      short: 2
-    },
+    sessionValues: DEFAULT_SESSION_VALUES,
     autoStartBreak: true,
     autoStartPomodoro: true,
     longBreakInterval: 4,
