@@ -11,7 +11,10 @@ export function Sidebar() {
     <header className="sidebar">
       <div className="sidebar__logo-section">
         <img src={logo} alt="logo" />
-        <p className="sidebar__logo-title">Pomodoto</p>
+        <div>
+          <p className="sidebar__logo-title">Pomodoto</p>
+          <small className="sidebar__app-version">{VITE_APP_VERSION}</small>
+        </div>
       </div>
       <nav className="sidebar__nav">
         <ul className="sidebar__list">
