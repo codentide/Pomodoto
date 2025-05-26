@@ -1,16 +1,13 @@
 import { useEffect } from 'react'
 import { useState, createContext } from 'react'
 
-// [ ]: Guardar cambios de las configuraciones en localStorage
-// [ ]: Cargar settings del localStorage, si no existe cargar default settings
-
 export const SettingsContext = createContext(null)
 export const SettingsProvider = ({ children, isTesting = false }) => {
   const LOCAL_STORAGE_KEY = 'settings'
 
   const DEFAULT_SESSION_VALUES = isTesting
     ? {
-        pomo: 10.5 * 60,
+        pomo: 12,
         long: 8,
         short: 4
       }

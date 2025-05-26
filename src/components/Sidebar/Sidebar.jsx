@@ -6,6 +6,12 @@ import logo from '/favicon.png'
 
 import './Sidebar.scss'
 
+// [ ]: Implementar lógica de login
+// [ ]: Componentizar enlaces para facilitar lectura
+// [ ]: Cambiar iconos
+// [ ]: Descargar licencia premium de los iconos usados
+// [ ]: Aplicar responsividad para celulares
+
 export function Sidebar() {
   return (
     <header className="sidebar">
@@ -13,7 +19,7 @@ export function Sidebar() {
         <img src={logo} alt="logo" />
         <div>
           <p className="sidebar__logo-title">Pomodoto</p>
-          <small className="sidebar__app-version">{VITE_APP_VERSION}</small>
+          <small className="sidebar__app-version">v{VITE_APP_VERSION}</small>
         </div>
       </div>
       <nav className="sidebar__nav">

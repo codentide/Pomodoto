@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useCallback } from 'react'
 import { SettingsContext, PomodoroContext } from '../context'
 import { endSessionNotify, notify } from '../tools/notification'
 import { useAlarm } from './useAlarm'
+import { secondsToTime } from '../tools'
 
 export const useTimer = () => {
   const {
@@ -149,6 +150,14 @@ export const useTimer = () => {
     }
     sendWorkerMessage(isRunning ? 'start' : 'pause')
   }, [isRunning, handleSessionEnd, notification])
+
+  // Cambiar el titulo con el conteo
+  useEffect(() => {
+    const mode = currentMode === 'pomo' ? 'Focus' : 'Break'
+    document.title = isRunning ? `${secondsToTime(timeLeft)} - ${mode}` : 'Pomodoto'
+
+    console.log(timeLeft)
+  }, [timeLeft, isRunning])
 
   return {
     startTimer,

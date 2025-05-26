@@ -5,10 +5,7 @@ import { Sidebar } from '../components'
 import { requestNotificationPermission } from '../tools'
 import './App.scss'
 
-// [x]: Aplicar clase hidden en vez de usar renderizado condicional en el router
-// [x]: Añadir en el timer "x of x sessions ended"
-// [ ]: Cuando el timer inicie mostrar en la pestaña el tiempo
-// [ ]: Crear una rama prod y una rama dev, ademas de crear el pipeline con github y netlify
+// [x]: Cuando el timer inicie mostrar en la pestaña el tiempo
 
 const routes = [
   { path: '/', Component: Home },

@@ -3,8 +3,6 @@ import { useState, createContext } from 'react'
 export const PomodoroContext = createContext(null)
 
 export const PomodoroProvider = ({ children }) => {
-  // [x]: Crear un contexto exclusivo para configuraciones
-
   const [currentMode, setCurrentMode] = useState('pomo')
   const [timeLeft, setTimeLeft] = useState(null)
   const [isRunning, setIsRunning] = useState(false)

@@ -9,7 +9,7 @@ export const PomoTabs = () => {
     const button = event.target
     const mode = button.getAttribute('data-tab')
 
-    // [ ]: Crear dialog propio para manejar esto con mejor ui
+    // [ ]: Crear modal para manejar esto de mejor manera
     if (isRunning) {
       const isConfirmed = window.confirm('Si cambias ahora, se perderá el progreso de la sesión actual, estas seguro?')
       if (!isConfirmed) return

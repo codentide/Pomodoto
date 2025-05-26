@@ -10,7 +10,6 @@ export const PomoTimer = () => {
   const { timeLeft, endedPomodoros, isRunning } = useContext(PomodoroContext)
   const { startTimer, pauseTimer, stopTimer } = useTimer()
 
-  // [x]: Colocar iconos (play / pause - reset - next) en los botones
   // [ ]: Añadir función para forzar la siguiente sesión (next)
 
   return (

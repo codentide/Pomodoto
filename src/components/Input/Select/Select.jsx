@@ -11,7 +11,7 @@ export function Select({
   value,
   onChange = (value) => console.log(value)
 }) {
-  // HACK: Porque el componente bloquea el scroll del body, buscarle solucion
+  // HACK: Se supone que el aria-componente bloquea el scroll cuando se abre, pero este no lo hace, investigar como cambiar la referencia del body a la que uno quiera desde la librería, mientras... utilizar este hack para cerrar el select cuando se mueva la rueda del ratón
 
   // Estado para gestionar la apertura del elemento
   const [isOpen, setIsOpen] = useState(false)

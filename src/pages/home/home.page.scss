@@ -1,0 +1,10 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 1rem;
+}
+
+.hidden {
+  display: none;
+}

@@ -10,7 +10,7 @@ createRoot(document.getElementById('root')).render(
       {/* Manejo de router */}
       <PageProvider>
         {/* Configuraciones globales */}
-        <SettingsProvider isTesting={false}>
+        <SettingsProvider isTesting={true}>
           <PomodoroProvider>
             <App />
           </PomodoroProvider>

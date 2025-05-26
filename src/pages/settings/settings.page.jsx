@@ -7,9 +7,6 @@ import { useAlarm } from '../../hooks/useAlarm'
 
 import './settings.page.scss'
 
-// [x]: Cuando se cambie un sonido reproducirlo
-// [x]: Cuando se hace reset en settings para que vuelva a sus antiguos valores no cambian los valores de los inputs (no desata un render)
-
 export function Settings({ className }) {
   const { playAlarm, stopAlarm } = useAlarm()
   const { settings, updateSettings, resetSettings } = useContext(SettingsContext)
@@ -182,7 +179,7 @@ export function Settings({ className }) {
             onChange={({ value, name }) => onInputChange(value, name, 'string')}
           ></Select>
         </fieldset>
-        <button className="reset-btn" onClick={resetSettings}>
+        <button className="reset-btn" onClick={resetSettings} title="Reset to default pomodoro values">
           <svg viewBox="0 0 24 24">
             <path d="M1.611,12c.759,0,1.375,.57,1.485,1.32,.641,4.339,4.389,7.68,8.903,7.68,5.476,0,9.827-4.917,8.867-10.569-.453-2.665-2.148-5.023-4.523-6.313-3.506-1.903-7.48-1.253-10.18,1.045l1.13,1.13c.63,.63,.184,1.707-.707,1.707H2c-.552,0-1-.448-1-1V2.414c0-.891,1.077-1.337,1.707-.707l1.332,1.332C7.6-.115,12.921-1.068,17.637,1.408c3.32,1.743,5.664,5.027,6.223,8.735,1.122,7.437-4.633,13.857-11.86,13.857-6.021,0-11.021-4.457-11.872-10.246-.135-.92,.553-1.754,1.483-1.754Z" />
           </svg>
