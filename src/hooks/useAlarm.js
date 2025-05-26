@@ -35,20 +35,23 @@ export const useAlarm = () => {
     currentAudioInstanceRef.current = null
   }, [])
 
-  const playAlarm = useCallback(() => {
-    if (!userInteractedRef.current || !isActive) return
+  const playAlarm = useCallback(
+    (audioSrc = false) => {
+      if (!userInteractedRef.current || !isActive) return
 
-    if (currentAudioInstanceRef.current) stopAlarm()
+      if (currentAudioInstanceRef.current) stopAlarm()
 
-    try {
-      const audio = new Audio(`/audio/${track}.mp3`)
-      audio.volume = volume / 100
-      audio.play()
-      currentAudioInstanceRef.current = audio
-    } catch (error) {
-      console.error(error)
-    }
-  }, [track, volume, isActive, stopAlarm])
+      try {
+        const audio = new Audio(audioSrc ? audioSrc : `/audio/${track}.mp3`)
+        audio.volume = volume / 100
+        audio.play()
+        currentAudioInstanceRef.current = audio
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    [track, volume, isActive, stopAlarm]
+  )
 
   return { playAlarm, stopAlarm }
 }

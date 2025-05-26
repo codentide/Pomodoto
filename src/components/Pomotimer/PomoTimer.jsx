@@ -4,39 +4,66 @@ import { secondsToTime } from '../../tools'
 import { PomoTabs } from './PomoTabs/PomoTabs'
 import { useTimer } from '../../hooks'
 import './PomoTimer.scss'
+import { useEffect } from 'react'
 
 export const PomoTimer = () => {
   const { settings } = useContext(SettingsContext)
   const { timeLeft, endedPomodoros, isRunning } = useContext(PomodoroContext)
-  const { startTimer, pauseTimer, stopTimer } = useTimer()
+  const { startTimer, pauseTimer, stopTimer, nextSession } = useTimer()
 
-  // [ ]: Añadir función para forzar la siguiente sesión (next)
+  // [x]: Añadir función para forzar la siguiente sesión (next)
+  // [ ]: Crear eventos con teclas para manejar el start/pause - stop - nextSession
+
+  useEffect(() => {
+    const handleKeyPressed = (event) => {
+      const key = event.code.toLowerCase()
+      event.preventDefault()
+      switch (key) {
+        case 'space':
+          if (!isRunning) startTimer()
+          else pauseTimer()
+          break
+        case 'arrowright':
+          if (isRunning) nextSession()
+          break
+        case 'arrowleft':
+          stopTimer()
+          break
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPressed)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPressed)
+    }
+  }, [isRunning])
 
   return (
     <div className="pomo-timer">
       <PomoTabs />
       <p className="pomo-timer__time">{secondsToTime(timeLeft)}</p>
       <div className="pomo-timer__controls">
-        <button className="pomo-timer__reset-btn" onClick={stopTimer}>
+        <button className="pomo-timer__reset-btn" onClick={stopTimer} title="Press [←] to reset ">
           <svg viewBox="0 0 24 24">
             <path d="M21.806,2.858c-.1-.325-.357-.578-.685-.67-.173-.049-4.273-1.188-9.121-1.188S3.052,2.139,2.88,2.188c-.329,.093-.588,.347-.687,.674-.049,.161-1.193,4.007-1.193,9.139,0,5.175,1.146,8.982,1.194,9.142,.1,.325,.358,.578,.686,.67,.172,.049,4.272,1.188,9.121,1.188s8.947-1.139,9.12-1.188c.329-.093,.588-.347,.687-.674,.049-.161,1.193-4.007,1.193-9.139,0-5.175-1.146-8.982-1.194-9.142Z" />
           </svg>
         </button>
         {isRunning ? (
-          <button onClick={pauseTimer}>
+          <button onClick={pauseTimer} title="Press [space] to pause">
             <svg viewBox="0 0 24 24">
               <path d="M10.26,1.918c-.139-.094-1.406-.918-2.96-.918s-2.819,.823-2.958,.917c-.253,.17-.415,.447-.439,.751-.003,.04-.315,4.08-.315,9.331,0,5.295,.312,9.292,.315,9.332,.024,.304,.186,.58,.438,.75,.139,.094,1.406,.918,2.959,.918s2.819-.823,2.959-.917c.253-.17,.415-.447,.439-.751,.003-.04,.315-4.08,.315-9.331,0-5.295-.312-9.292-.315-9.332-.024-.304-.186-.58-.438-.75Z" />
               <path d="M20.097,2.668c-.024-.304-.186-.58-.438-.75-.139-.094-1.406-.918-2.959-.918s-2.819,.823-2.959,.917c-.253,.17-.415,.447-.439,.751-.003,.04-.315,4.08-.315,9.331,0,5.295,.312,9.292,.315,9.332,.024,.304,.186,.58,.438,.75,.139,.094,1.406,.918,2.96,.918s2.819-.823,2.958-.917c.253-.17,.415-.447,.439-.751,.003-.04,.315-4.08,.315-9.331,0-5.295-.312-9.292-.315-9.332Z" />
             </svg>
           </button>
         ) : (
-          <button onClick={startTimer}>
+          <button onClick={startTimer} title="Press [space] to start">
             <svg viewBox="0 0 24 24">
               <path d="M20.426,10.097c-1.231-1.445-3.415-3.622-6.832-5.779-2.81-1.774-5.311-2.716-6.915-3.194-.9-.268-1.854-.101-2.612,.464-.758,.566-1.193,1.432-1.193,2.377V20.035c0,.945,.436,1.811,1.193,2.377,.521,.388,1.135,.589,1.761,.589,.284,0,.57-.042,.852-.125,1.604-.478,4.105-1.42,6.915-3.194,3.417-2.158,5.601-4.334,6.832-5.78,.938-1.102,.938-2.703,0-3.805Z" />
             </svg>
           </button>
         )}
-        <button disabled>
+        <button disabled={!isRunning} onClick={nextSession} title="Press [→] to next session">
           <svg viewBox="0 0 24 24">
             <path d="m18.797 11.38c.135.182.203.401.203.62s-.068.438-.203.62c-.214.287-2.223 2.894-6.844 6.154-4.827 3.406-7.754 4.168-7.877 4.198-.486.124-.986-.181-1.126-.694-.039-.142-.951-3.547-.951-10.279s.914-10.136.952-10.278c.14-.513.633-.821 1.126-.694.122.03 3.049.792 7.877 4.198 4.621 3.26 6.63 5.868 6.844 6.154zm2.169-9.318c-.241-.79-1.072-1.238-1.868-.995-.791.239-1.239 1.076-1.002 1.868.009.03.903 3.09.903 9.066s-.89 9.017-.903 9.065c-.239.791.206 1.627.997 1.869.771.242 1.633-.196 1.873-.996.042-.138 1.033-3.456 1.033-9.938s-.991-9.8-1.033-9.938z" />
           </svg>

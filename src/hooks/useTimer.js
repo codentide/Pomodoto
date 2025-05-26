@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useCallback } from 'react'
 import { SettingsContext, PomodoroContext } from '../context'
-import { endSessionNotify, notify } from '../tools/notification'
+import { endSessionNotify } from '../tools/notification'
 import { useAlarm } from './useAlarm'
 import { secondsToTime } from '../tools'
 
@@ -62,17 +62,26 @@ export const useTimer = () => {
   // Inicia el timer
   const startTimer = () => {
     updateIsRunning(true)
+    // playAlarm('/audio/button-pressed.mp3')
+    playAlarm('/audio/sound-on.mp3')
   }
 
   // Pausa el timer
   const pauseTimer = () => {
     updateIsRunning(false, true)
+    playAlarm('/audio/sound-off.mp3')
   }
 
   // Detiene el timer y reinicia el tiempo restante al valor de la sesión actual
   const stopTimer = () => {
     updateIsRunning(false, true)
     sendWorkerMessage('reset')
+  }
+
+  // Forzar siguiente sesión
+  const nextSession = () => {
+    isSessionEndingRef.current = true
+    updateIsRunning(false)
   }
 
   // Finaliza el timer y cambia el modo actual
@@ -162,6 +171,7 @@ export const useTimer = () => {
   return {
     startTimer,
     pauseTimer,
-    stopTimer
+    stopTimer,
+    nextSession
   }
 }
