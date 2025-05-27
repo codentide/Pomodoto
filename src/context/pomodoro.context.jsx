@@ -1,13 +1,27 @@
 import { useState, createContext } from 'react'
+import { loadFromLocalStorage, saveInLocalStorage } from '../tools'
+import { useEffect } from 'react'
+
+// [x]: Ended Pomodoros tambien se guardará en local storage
+// [ ]: Guardar pomodoros totales para estadísticas
 
 export const PomodoroContext = createContext(null)
 
 export const PomodoroProvider = ({ children }) => {
+  const STORAGE_POMODORO_COUNT_KEY = 'pomodoroCount'
+
   const [currentMode, setCurrentMode] = useState('pomo')
   const [timeLeft, setTimeLeft] = useState(null)
   const [isRunning, setIsRunning] = useState(false)
   const [userInterrupted, setUserInterrupted] = useState(false)
-  const [endedPomodoros, setEndedPomodoros] = useState(0)
+
+  // Ended Pomodoros
+  const [endedPomodoros, setEndedPomodoros] = useState(loadFromLocalStorage(STORAGE_POMODORO_COUNT_KEY, 0))
+
+  useEffect(() => {
+    console.log('asfasfdfssfasf')
+    saveInLocalStorage(STORAGE_POMODORO_COUNT_KEY, endedPomodoros)
+  }, [endedPomodoros])
 
   //
 

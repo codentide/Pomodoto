@@ -19,8 +19,6 @@ function sendSessionEnd() {
   postMessage({
     type: 'sessionEnd'
   })
-
-  console.log('[TIME-WORKER] Session Ended')
 }
 
 function startTimer() {

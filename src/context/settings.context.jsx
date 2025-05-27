@@ -1,63 +1,16 @@
 import { useEffect } from 'react'
 import { useState, createContext } from 'react'
+import { loadFromLocalStorage, saveInLocalStorage } from '../tools'
+import { DEFAULT_SETTINGS, DEFAULT_SESSION_VALUES, TEST_SESSION_VALUES } from '../constants'
 
 export const SettingsContext = createContext(null)
 export const SettingsProvider = ({ children, isTesting = false }) => {
-  const LOCAL_STORAGE_KEY = 'settings'
+  const STORAGE_SETTINGS_KEY = 'settings'
 
-  const DEFAULT_SESSION_VALUES = isTesting
-    ? {
-        pomo: 12,
-        long: 8,
-        short: 4
-      }
-    : {
-        pomo: 25 * 60,
-        long: 15 * 60,
-        short: 5 * 60
-      }
-
-  const DEFAULT_SETTINGS = {
-    sessionValues: DEFAULT_SESSION_VALUES,
-    autoStartBreak: true,
-    autoStartPomodoro: true,
-    longBreakInterval: 4,
-    notification: {
-      isActive: true,
-      sound: {
-        isActive: true,
-        track: 'default-tone',
-        volume: 50
-      }
-    },
-    ticking: {
-      isActive: false,
-      track: 'tick',
-      volume: 75
-    }
-  }
-
-  const loadSettings = () => {
-    try {
-      const storedSettings = localStorage.getItem(LOCAL_STORAGE_KEY)
-      if (storedSettings) return JSON.parse(storedSettings)
-    } catch (error) {
-      console.error('Error al cargar settings desde localStorage: ', error)
-    }
-
-    // Fallback
-    console.log('Entregando fallback de settings')
-    return DEFAULT_SETTINGS
-  }
-
-  const [settings, setSettings] = useState(loadSettings)
+  const [settings, setSettings] = useState(loadFromLocalStorage(STORAGE_SETTINGS_KEY, DEFAULT_SETTINGS))
 
   useEffect(() => {
-    try {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(settings))
-    } catch (error) {
-      console.error('Error al guardar settings en localStorage', error)
-    }
+    saveInLocalStorage(STORAGE_SETTINGS_KEY, settings)
   }, [settings])
 
   function updateSettings(path, value) {
@@ -78,7 +31,7 @@ export const SettingsProvider = ({ children, isTesting = false }) => {
   function resetSettings() {
     setSettings((prev) => ({
       ...prev,
-      sessionValues: DEFAULT_SESSION_VALUES,
+      sessionValues: !isTesting ? DEFAULT_SESSION_VALUES : TEST_SESSION_VALUES,
       longBreakInterval: 4
     }))
   }

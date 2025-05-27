@@ -8,18 +8,21 @@ import { useEffect } from 'react'
 
 export const PomoTimer = () => {
   const { settings } = useContext(SettingsContext)
-  const { timeLeft, endedPomodoros, isRunning } = useContext(PomodoroContext)
+  const { timeLeft, endedPomodoros, isRunning, resetPomodoroCount } = useContext(PomodoroContext)
   const { startTimer, pauseTimer, stopTimer, nextSession } = useTimer()
 
   // [x]: Añadir función para forzar la siguiente sesión (next)
-  // [ ]: Crear eventos con teclas para manejar el start/pause - stop - nextSession
+  // [x]: Crear eventos con teclas para manejar el start/pause - stop - nextSession
+  // [ ]: Mostrar shortcuts (space, arrowLeft, arrowRight)
+  // [ ]: Estilizar botón de reset pomodoro count
 
+  // Eventos con teclao
   useEffect(() => {
     const handleKeyPressed = (event) => {
       const key = event.code.toLowerCase()
-      event.preventDefault()
       switch (key) {
         case 'space':
+          event.preventDefault()
           if (!isRunning) startTimer()
           else pauseTimer()
           break
@@ -73,6 +76,7 @@ export const PomoTimer = () => {
       <small>
         {endedPomodoros} of {settings.longBreakInterval}
       </small>
+      <button onClick={resetPomodoroCount}>Reset Pomodoro Count</button>
     </div>
   )
 }

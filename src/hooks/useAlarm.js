@@ -36,14 +36,16 @@ export const useAlarm = () => {
   }, [])
 
   const playAlarm = useCallback(
-    (audioSrc = false) => {
+    (manualAudio, manualVolumen) => {
       if (!userInteractedRef.current || !isActive) return
-
       if (currentAudioInstanceRef.current) stopAlarm()
 
+      const audioSrc = manualAudio || `/audio/${track}.mp3`
+      const audioVol = (manualVolumen || volume) / 100
+
       try {
-        const audio = new Audio(audioSrc ? audioSrc : `/audio/${track}.mp3`)
-        audio.volume = volume / 100
+        const audio = new Audio(audioSrc)
+        audio.volume = audioVol
         audio.play()
         currentAudioInstanceRef.current = audio
       } catch (error) {

@@ -6,11 +6,11 @@ import logo from '/favicon.png'
 
 import './Sidebar.scss'
 
-// [ ]: Implementar lógica de login
 // [ ]: Componentizar enlaces para facilitar lectura
 // [ ]: Cambiar iconos
 // [ ]: Descargar licencia premium de los iconos usados
 // [ ]: Aplicar responsividad para celulares
+// [ ]: Implementar lógica de login
 
 export function Sidebar() {
   return (
