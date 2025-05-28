@@ -32,3 +32,10 @@ export const secondsToMinutes = (seconds) => {
 export const minutesToSeconds = (minutes) => {
   return minutes * 60
 }
+
+// Date
+
+// YYYY-MM-DD
+export const getISODateString = (date) => {
+  return date.toISOString().split('T')[0]
+}

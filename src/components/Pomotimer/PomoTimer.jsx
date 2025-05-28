@@ -16,7 +16,7 @@ export const PomoTimer = () => {
   // [ ]: Mostrar shortcuts (space, arrowLeft, arrowRight)
   // [ ]: Estilizar botón de reset pomodoro count
 
-  // Eventos con teclao
+  // Eventos con teclado
   useEffect(() => {
     const handleKeyPressed = (event) => {
       const key = event.code.toLowerCase()

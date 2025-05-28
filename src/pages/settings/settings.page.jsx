@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef } from 'react'
-import { SettingsContext } from '../../context'
+import { PomodoroContext, SettingsContext } from '../../context'
 import { Range, Switch, Select } from '../../components'
 import { minutesToSeconds, secondsToMinutes } from '../../tools'
 import { alarmTracks, tickingTracks } from '../../constants/tracks'
@@ -9,8 +9,9 @@ import './settings.page.scss'
 
 export function Settings({ className }) {
   const { playAlarm, stopAlarm } = useAlarm()
+  const { endedPomodoros, resetPomodoroCount } = useContext(PomodoroContext)
   const { settings, updateSettings, resetSettings } = useContext(SettingsContext)
-  const { sessionValues, notification } = settings
+  const { sessionValues, notification, longBreakInterval } = settings
   const { track, volume } = notification.sound
 
   const debounceTimeoutRef = useRef(null)
@@ -36,6 +37,16 @@ export function Settings({ className }) {
       if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current)
     }
   }, [volume])
+
+  // Efecto para manejar el longBreakInterval
+
+  // [ ]: Buscar una manera con mejor ux para manejar este caso
+  useEffect(() => {
+    if (longBreakInterval < endedPomodoros) {
+      alert('El valor de long break interval debe ser mayor que los pomodoros terminados')
+      resetPomodoroCount()
+    }
+  }, [longBreakInterval])
 
   const onInputChange = (value, name, type) => {
     switch (type) {
