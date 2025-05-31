@@ -4,34 +4,34 @@
 .tab-box {
   display: flex;
   align-items: center;
-  gap: .4rem;
+  gap: 0.4rem;
 
   width: 100%;
-  padding: .4rem;
-  border-radius: .6rem;
+  padding: 0.4rem;
+  border-radius: 0.6rem;
 
-  background-color: $bl-100;
-  
+  background-color: $bl-200;
+
   &__button {
     display: grid;
     place-items: center;
 
     width: 100%;
-    padding: .5rem;
-    border-radius: .4rem;
+    padding: 0.5rem;
+    border-radius: 0.4rem;
     border: none;
 
-    font-size: .8rem;
+    font-size: 0.8rem;
     font-weight: 400;
 
     color: $wh-500;
     background-color: transparent;
 
     cursor: pointer;
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 
     &.active {
-      background-color: $bl-200;
+      background-color: $bl-300;
       color: $wh-100;
     }
   }

@@ -11,10 +11,10 @@
   flex-direction: column;
 
   width: 12rem;
-  border-radius: 0.64rem;
+  // border-radius: 0.64rem;
 
-  border: 1px solid $bl-200;
-  background-color: $bl-100;
+  border: 1px solid $bl-300;
+  background-color: $bl-200;
 
   &__logo-section {
     display: flex;
@@ -22,7 +22,7 @@
     gap: 0.6rem;
 
     padding: 1rem 1.8rem;
-    border-bottom: 1px solid $bl-200;
+    border-bottom: 1px solid $bl-300;
 
     img {
       height: auto;
@@ -92,8 +92,7 @@
           }
 
           &:hover {
-            filter: brightness(1.4);
-            background-color: hsl(0, 0%, 10%);
+            background-color: $bl-300;
           }
         }
       }

@@ -33,7 +33,7 @@
     gap: 0.4rem;
 
     button {
-      @include button-styles($bl-100, $wh-300, none);
+      @include button-styles($bl-200, $wh-300, none);
 
       font-family: inherit;
       font-size: 0.9rem;
@@ -44,14 +44,6 @@
       width: 4rem;
       padding: 1rem;
       border-radius: 0.6rem;
-
-      // &:first-of-type {
-      //   border-radius: 0.5rem 0.1rem 0.1rem 0.5rem;
-      // }
-
-      // &:last-of-type {
-      //   border-radius: 0.1rem 0.5rem 0.5rem 0.1rem;
-      // }
 
       &:hover {
         filter: brightness(0.9);

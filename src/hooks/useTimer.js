@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useCallback } from 'react'
 import { SettingsContext, PomodoroContext } from '../context'
 import { endSessionNotify } from '../tools/notification'
 import { useAlarm } from './useAlarm'
-import { secondsToTime } from '../tools'
+import { isDev, secondsToTime } from '../tools'
 
 export const useTimer = () => {
   const {
@@ -69,6 +69,10 @@ export const useTimer = () => {
 
   // Finaliza el timer y cambia el modo actual
   const handleSessionEnd = useCallback(() => {
+    // Priorizar
+    playAlarm()
+    endSessionNotify(currentMode)
+
     // Guardar ultimo modo completado
     lastCompletedMode.current = currentMode
     isSessionEndingRef.current = false
@@ -80,9 +84,6 @@ export const useTimer = () => {
       if (nextCount > longBreakInterval) resetPomodoroCount()
       completePomodoro()
     } else if (currentMode === 'long') resetPomodoroCount()
-
-    endSessionNotify(currentMode)
-    playAlarm()
 
     setTimeout(() => {
       const nextMode = determineNextMode()
@@ -134,10 +135,6 @@ export const useTimer = () => {
   }, [currentMode, pomo, short, long])
 
   useEffect(() => {
-    // const currentDuration = sessionValues[currentMode]
-    // timerWorkerRef.current.postMessage({ type: 'setDuration', payload: currentDuration })
-    // sendWorkerMessage('reset')
-
     if (!userInterrupted && lastCompletedMode.current !== null) {
       const shouldAutoStart = currentMode === 'pomo' ? autoStartPomodoro : autoStartBreak
       updateIsRunning(shouldAutoStart)
@@ -152,6 +149,7 @@ export const useTimer = () => {
     sendWorkerMessage(isRunning ? 'start' : 'pause')
   }, [isRunning, handleSessionEnd, notification])
 
+  // [ ]: este efecto puede vivir en otro lado quizá
   // Cambiar el titulo con el conteo
   useEffect(() => {
     const mode = currentMode === 'pomo' ? 'Focus' : 'Break'

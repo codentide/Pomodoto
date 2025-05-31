@@ -3,6 +3,7 @@ import { Link } from '../Link/Link'
 import settingsIcon from '../../assets/svg/settings.svg'
 import houseIcon from '../../assets/svg/house.svg'
 import logo from '/favicon.png'
+import { isDev } from '../../tools'
 
 import './Sidebar.scss'
 
@@ -19,7 +20,10 @@ export function Sidebar() {
         <img src={logo} alt="logo" />
         <div>
           <p className="sidebar__logo-title">Pomodoto</p>
-          <small className="sidebar__app-version">v{VITE_APP_VERSION}</small>
+          <small className="sidebar__app-version">
+            {isDev() ? 'Dev' : 'v'}
+            {VITE_APP_VERSION}
+          </small>
         </div>
       </div>
       <nav className="sidebar__nav">
