@@ -2,7 +2,7 @@ export * from './Pomolist/Pomolist'
 export * from './Pomotimer/PomoTimer'
 export * from './Sidebar/Sidebar'
 export * from './Link/Link'
-export * from './Stepbar/Stepbar'
+export * from './SegmentBar/SegmentBar'
 
 // Input
 export * from './Input/Range/InputRange'
