@@ -1,5 +1,5 @@
 // Hue
-$hue: 216;
+$hue: 200;
 
 // Primary Colors
 $pm-100: hsl($hue, 50%, 90%);
@@ -25,17 +25,17 @@ $wh-400: hsl(0, 0%, 60%);
 $wh-500: hsl(0, 0%, 50%);
 
 // Black
-$bl-100: hsl($hue, 16%, 4%);
-$bl-200: hsl($hue, 16%, 8%);
-$bl-300: hsl($hue, 16%, 12%);
-$bl-400: hsl($hue, 16%, 16%);
-$bl-500: hsl($hue, 16%, 20%);
+$bl-100: hsl($hue, 24%, 4%);
+$bl-200: hsl($hue, 20%, 8%);
+$bl-300: hsl($hue, 20%, 12%);
+$bl-400: hsl($hue, 20%, 16%);
+$bl-500: hsl($hue, 20%, 20%);
 
 // Font Sizes
 $font-size-base: 16px;
 
 // Font Families
-$font-primary: 'Rubik', sans-serif;
+$font-primary: 'Rubik', system-ui, sans-serif;
 
 // Global
 $sidebar-gap: 0px;

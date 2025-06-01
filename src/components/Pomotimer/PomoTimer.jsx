@@ -6,10 +6,11 @@ import { secondsToTime } from '../../tools'
 import { useTimer } from '../../hooks'
 import './PomoTimer.scss'
 
-import PlayIcon from '../../assets/svg/play.svg?react'
-import PauseIcon from '../../assets/svg/pause.svg?react'
-import NextIcon from '../../assets/svg/next.svg?react'
-import StopIcon from '../../assets/svg/stop.svg?react'
+import PlaySVG from '../../assets/svg/play.svg?react'
+import PauseSVG from '../../assets/svg/pause.svg?react'
+import NextSVG from '../../assets/svg/next.svg?react'
+import StopSVG from '../../assets/svg/stop.svg?react'
+import RefreshSVG from '../../assets/svg/refresh.svg?react'
 
 export const PomoTimer = () => {
   const { settings } = useContext(SettingsContext)
@@ -50,22 +51,28 @@ export const PomoTimer = () => {
   return (
     <div className="pomo-timer">
       <PomoTabs />
-      <p className="pomo-timer__time">{secondsToTime(timeLeft)}</p>
+
+      <div className="pomo-timer__display">
+        <p className="time-left">{secondsToTime(timeLeft)}</p>
+        <SegmentBar title="askf" value={endedPomodoros} limit={settings.longBreakInterval} />
+      </div>
+
       <div className="pomo-timer__controls">
-        <button className="pomo-timer__reset-btn" onClick={stopTimer} title="Press [←] to reset ">
-          <StopIcon />
-        </button>
-        <button onClick={isRunning ? pauseTimer : startTimer} title="Press [space] to pause">
-          {isRunning ? <PauseIcon /> : <PlayIcon />}
-        </button>
-        <button disabled={!isRunning} onClick={nextSession} title="Press [→] to next session">
-          <NextIcon />
+        <div className="button-box">
+          <button className="pomo-timer__reset-btn" onClick={stopTimer} title="Press [←] to reset ">
+            <StopSVG />
+          </button>
+          <button onClick={isRunning ? pauseTimer : startTimer} title="Press [space] to pause">
+            {isRunning ? <PauseSVG /> : <PlaySVG />}
+          </button>
+          <button disabled={!isRunning} onClick={nextSession} title="Press [→] to next session">
+            <NextSVG />
+          </button>
+        </div>
+        <button className="refresh-btn" onClick={resetPomodoroCount}>
+          <RefreshSVG />
         </button>
       </div>
-      <br />
-      <SegmentBar value={endedPomodoros} limit={settings.longBreakInterval} />
-      <br />
-      <button onClick={resetPomodoroCount}>Reset Pomodoro Count</button>
     </div>
   )
 }

@@ -40,12 +40,22 @@ export function Settings({ className }) {
 
   // Efecto para manejar el longBreakInterval
 
-  // [ ]: Buscar una manera con mejor ux para manejar este caso
+  // [x]: Buscar una manera con mejor ux para manejar este caso
+  // [ ]: Utilizar Aria Dialog porque no suelta el click al salir
   useEffect(() => {
-    if (longBreakInterval < endedPomodoros) {
-      alert('El valor de long break interval debe ser mayor que los pomodoros terminados')
-      resetPomodoroCount()
-    }
+    // COMENTADO MIENTRAS USAMOS DIALOGS PERSONALZIADOS QUE NO PAUSEN LA EJECUCION
+    // if (longBreakInterval < endedPomodoros) {
+    //   const isConfirmed = window.confirm(
+    //     'Alerta: Reducir el límite de pomodoros reiniciará el progreso actual. ¿Confirmas este cambio?'
+    //   )
+
+    //   if (isConfirmed) {
+    //     resetPomodoroCount()
+    //     return
+    //   }
+    // }
+
+    if (longBreakInterval < endedPomodoros) resetPomodoroCount()
   }, [longBreakInterval])
 
   const onInputChange = (value, name, type) => {

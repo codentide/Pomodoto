@@ -5,66 +5,127 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.4rem;
+  gap: 2rem;
 
   width: fit-content;
-  padding: 2rem;
-  border-radius: 1.2rem;
 
   margin: 0 auto;
 
-  // border: 1px dashed hsl(0, 0%, 50%, .2);
+  &__display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.6rem;
 
-  &__time {
-    font-size: clamp(2rem, 18vw, 12rem);
-    font-variant-numeric: tabular-nums;
-    font-weight: 500;
-    text-align: center;
-    letter-spacing: -0.4rem;
-    color: $wh-100;
+    .time-left {
+      display: inline;
 
-    animation: fadeIn 0.8s forwards ease;
+      font-size: clamp(2rem, 18vw, 12rem);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+      line-height: 0.8;
+      letter-spacing: -0.4rem;
+
+      color: $wh-100;
+
+      opacity: 0;
+
+      animation: fadeIn 0.8s forwards ease;
+
+      user-select: none;
+    }
   }
 
   .pomo-timer__controls {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
+    gap: 1.6rem;
 
-    button {
-      @include button-styles($bl-200, $wh-300, none);
+    .button-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
 
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 400;
-      text-transform: capitalize;
+      button {
+        @include button-styles($bl-200, $wh-300, none);
 
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 400;
+        text-transform: capitalize;
+
+        aspect-ratio: 1;
+        width: 4rem;
+        padding: 1rem;
+        border-radius: 0.6rem;
+
+        &:not(:nth-last-of-type(2)) {
+          width: 3rem;
+          padding: 0.8rem;
+        }
+
+        svg {
+          aspect-ratio: 1;
+          height: 100%;
+
+          fill: $wh-300;
+        }
+
+        &:hover {
+          filter: brightness(0.9);
+        }
+
+        &:focus {
+          outline: none;
+          filter: brightness(1.2) contrast(90%);
+        }
+
+        &:disabled {
+          opacity: 0.3;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  .refresh-btn {
+    @include button-styles($bl-200, $wh-300, none);
+
+    aspect-ratio: 1;
+    width: 1rem;
+    padding: 0;
+    border-radius: 0;
+
+    background-color: transparent;
+
+    svg {
       aspect-ratio: 1;
-      width: 4rem;
-      padding: 1rem;
-      border-radius: 0.6rem;
+      width: 100%;
 
-      &:hover {
-        filter: brightness(0.9);
-      }
+      fill: $wh-300;
+    }
 
-      &:not(:nth-last-of-type(2)) {
-        width: 3rem;
-        padding: 0.8rem;
+    &:hover {
+      svg {
+        fill: $wh-100;
       }
+    }
+
+    &:focus {
+      outline: none;
+      filter: drop-shadow(0 0 0.4rem $wh-200);
 
       svg {
-        aspect-ratio: 1;
-        height: 100%;
-
-        fill: $wh-300;
+        fill: $wh-100;
       }
+    }
 
-      &:disabled {
-        opacity: 0.3;
-        pointer-events: none;
-      }
+    &:disabled {
+      opacity: 0.3;
+      pointer-events: none;
     }
   }
 }

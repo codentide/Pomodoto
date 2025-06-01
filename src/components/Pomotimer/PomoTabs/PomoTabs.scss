@@ -25,7 +25,7 @@
     font-weight: 400;
 
     color: $wh-500;
-    background-color: transparent;
+    background-color: $bl-200;
 
     cursor: pointer;
     transition: all 0.2s ease-in-out;
@@ -33,6 +33,12 @@
     &.active {
       background-color: $bl-300;
       color: $wh-100;
+    }
+
+    &:focus {
+      outline: none;
+      color: $wh-200;
+      filter: brightness(1.2);
     }
   }
 }
