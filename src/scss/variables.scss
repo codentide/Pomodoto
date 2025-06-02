@@ -1,5 +1,5 @@
 // Hue
-$hue: 200;
+$hue: 216;
 
 // Primary Colors
 $pm-100: hsl($hue, 50%, 90%);
@@ -11,18 +11,19 @@ $pm-600: hsl($hue, 70%, 20%);
 $pm-700: hsl($hue, 80%, 10%);
 
 // Border
-$border-100: hsl(0, 0%, 70%);
-$border-200: hsl(0, 0%, 60%);
-$border-300: hsl(0, 0%, 50%);
-$border-400: hsl(0, 0%, 40%);
-$border-500: hsl(0, 0%, 30%);
+$border-100: hsl($hue, 24%, 70%);
+$border-200: hsl($hue, 24%, 60%);
+$border-300: hsl($hue, 24%, 50%);
+$border-400: hsl($hue, 24%, 40%);
+$border-500: hsl($hue, 24%, 30%);
 
 // White
-$wh-100: hsl(0, 0%, 90%);
-$wh-200: hsl(0, 0%, 80%);
-$wh-300: hsl(0, 0%, 70%);
-$wh-400: hsl(0, 0%, 60%);
-$wh-500: hsl(0, 0%, 50%);
+$wh-100: hsl($hue, 16%, 90%);
+$wh-200: hsl($hue, 16%, 80%);
+$wh-300: hsl($hue, 16%, 70%);
+$wh-400: hsl($hue, 8%, 60%);
+$wh-500: hsl($hue, 8%, 50%);
+$wh-600: hsl($hue, 8%, 40%);
 
 // Black
 $bl-100: hsl($hue, 24%, 4%);

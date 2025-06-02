@@ -7,6 +7,9 @@ import { isDev } from '../../tools'
 
 import './Sidebar.scss'
 
+import TimerSVG from "../../assets/svg/timer.svg?react"
+import SettingsSVG from "../../assets/svg/settings.svg?react"
+
 // [ ]: Componentizar enlaces para facilitar lectura
 // [ ]: Cambiar iconos
 // [ ]: Descargar licencia premium de los iconos usados
@@ -16,6 +19,23 @@ import './Sidebar.scss'
 export function Sidebar() {
   return (
     <header className="sidebar">
+      <nav className="sidebar__nav">
+        <ul className="sidebar__list">
+          <li className="sidebar__list-item">
+            <Link className="sidebar__tab" to={'/'}>
+              <TimerSVG />
+              <span>timer</span>
+            </Link>
+          </li>
+          <li className="sidebar__nav__list__item">
+            <Link className="sidebar__tab" to={'/settings'}>
+              {/* <img src={settingsIcon} alt="Icono de ajustes" /> */}
+              <SettingsSVG/>
+              <span>settings</span>
+            </Link>
+          </li>
+        </ul>
+      </nav>
       <div className="sidebar__logo-section">
         <img src={logo} alt="logo" />
         <div>
@@ -26,27 +46,6 @@ export function Sidebar() {
           </small>
         </div>
       </div>
-      <nav className="sidebar__nav">
-        <ul className="sidebar__list">
-          <li className="sidebar__list-item">
-            <Link className="sidebar__tab" to={'/'}>
-              <img src={houseIcon} alt="Icono de casa" />
-              <span>home</span>
-            </Link>
-          </li>
-          <li className="sidebar__nav__list__item">
-            <Link className="sidebar__tab" to={'/settings'}>
-              <img src={settingsIcon} alt="Icono de ajustes" />
-              <span>settings</span>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-      {/* <div className="sidebar__login-box">
-          <a href="#" className="header__nav__link">
-            Login
-          </a>
-        </div> */}
     </header>
   )
 }

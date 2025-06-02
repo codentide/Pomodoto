@@ -12,6 +12,14 @@ export const useAlarm = () => {
   useEffect(() => {
     const handleUserInteraction = () => {
       userInteractedRef.current = true
+      console.log('El usuario ha interactuado, se puede reproducir sonido')
+
+      // Reproducir un sonido silencionso para "engañar" al navegador
+      const silentAudio = new Audio(`/audio/${track}.mp3`) // Crea un archivo silent.mp3
+      silentAudio.volume = 0
+      silentAudio.play().catch((error) => {
+        console.warn('La reproducción del sonido silencioso fue bloqueada:', error)
+      })
     }
 
     window.addEventListener('wheel', handleUserInteraction, { once: true })
