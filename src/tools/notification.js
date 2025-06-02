@@ -1,9 +1,12 @@
-export function notify(title, body) {
+export function notify(title, body, tag) {
   if (Notification.permission !== 'granted') return
 
   new Notification(title, {
     icon: '/favicon.png',
-    body: body || ''
+    body: body || '',
+    tag: tag || '',
+    renotify: true,
+    silent: false
   })
 }
 
@@ -22,7 +25,7 @@ export function endSessionNotify(mode) {
       break
   }
 
-  notify(title)
+  notify(title, '', 'timer-session-end')
 }
 
 export function requestNotificationPermission() {

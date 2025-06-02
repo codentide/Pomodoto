@@ -31,7 +31,7 @@
 
     cursor: pointer;
 
-    background-color: $bl-100;
+    background-color: $bl-200;
 
     // focus
     &[data-focus-visible] {
@@ -97,9 +97,10 @@
         padding: 0.6rem 0.8rem;
 
         border-bottom: 1px solid $bl-200;
-        background-color: hsla(0, 0%, 6%, 0.9);
+        background-color: hsla($hue, 24%, 6%, 0.9);
 
         cursor: pointer;
+        transition: all 0.2s ease;
 
         &:last-child {
           border: none;
@@ -111,7 +112,7 @@
 
         &[data-focused],
         &[data-pressed] {
-          background-color: hsla(0, 0%, 12%, 0.9);
+          background-color: hsla($hue, 24%, 10%, 0.9);
         }
       }
     }

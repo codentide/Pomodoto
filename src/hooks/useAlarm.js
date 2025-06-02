@@ -12,6 +12,14 @@ export const useAlarm = () => {
   useEffect(() => {
     const handleUserInteraction = () => {
       userInteractedRef.current = true
+      console.log('El usuario ha interactuado, se puede reproducir sonido')
+
+      // Reproducir un sonido silencionso para "engañar" al navegador
+      const silentAudio = new Audio(`/audio/${track}.mp3`) // Crea un archivo silent.mp3
+      silentAudio.volume = 0
+      silentAudio.play().catch((error) => {
+        console.warn('La reproducción del sonido silencioso fue bloqueada:', error)
+      })
     }
 
     window.addEventListener('wheel', handleUserInteraction, { once: true })
@@ -35,20 +43,25 @@ export const useAlarm = () => {
     currentAudioInstanceRef.current = null
   }, [])
 
-  const playAlarm = useCallback(() => {
-    if (!userInteractedRef.current || !isActive) return
+  const playAlarm = useCallback(
+    (manualAudio, manualVolumen) => {
+      if (!userInteractedRef.current || !isActive) return
+      if (currentAudioInstanceRef.current) stopAlarm()
 
-    if (currentAudioInstanceRef.current) stopAlarm()
+      const audioSrc = manualAudio || `/audio/${track}.mp3`
+      const audioVol = (manualVolumen || volume) / 100
 
-    try {
-      const audio = new Audio(`/audio/${track}.mp3`)
-      audio.volume = volume / 100
-      audio.play()
-      currentAudioInstanceRef.current = audio
-    } catch (error) {
-      console.error(error)
-    }
-  }, [track, volume, isActive, stopAlarm])
+      try {
+        const audio = new Audio(audioSrc)
+        audio.volume = audioVol
+        audio.play()
+        currentAudioInstanceRef.current = audio
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    [track, volume, isActive, stopAlarm]
+  )
 
   return { playAlarm, stopAlarm }
 }

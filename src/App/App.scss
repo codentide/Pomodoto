@@ -32,30 +32,11 @@
   z-index: 0;
 }
 
-// 
+//
 
-main{
+main {
   position: relative;
   box-sizing: border-box;
 
   height: 100%;
 }
-
-// [ ]: Migrar Home a su propio hoja de estilos
-
-.home {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  gap: 1rem;
-}
-
-.hidden {
-  display: none;
-}
-
-// [x]: Migrar Settings a su propio hoja de estilos
-
-
-
-  

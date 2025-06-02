@@ -1,8 +1,9 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { PageContext } from '../../context'
 
-export function Link({ target, to, ...props }) {
-  const { navigate } = useContext(PageContext)
+export function Link({ target, to, className, ...props }) {
+  const { currentPath, navigate } = useContext(PageContext)
+
 
   const handleClick = (event) => {
     // Capturar si es un click primario
@@ -18,5 +19,6 @@ export function Link({ target, to, ...props }) {
     }
   }
 
-  return <a onClick={handleClick} href={to} target={target} {...props}></a>
+
+  return <a className={`${className} ${currentPath === to && "active"}`} onClick={handleClick} href={to} target={target} {...props}></a>
 }
