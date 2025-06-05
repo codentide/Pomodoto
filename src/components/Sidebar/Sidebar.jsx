@@ -1,7 +1,5 @@
 import { Link } from '../Link/Link'
 
-import settingsIcon from '../../assets/svg/settings.svg'
-import houseIcon from '../../assets/svg/house.svg'
 import logo from '/favicon.png'
 import { isDev } from '../../tools'
 

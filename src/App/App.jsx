@@ -1,7 +1,7 @@
 import { useEffect, useContext } from 'react'
 import { PageContext } from '../context'
 import { Home, Settings } from '../pages'
-import { Sidebar } from '../components'
+import { Dialog, Sidebar } from '../components'
 import { requestNotificationPermission } from '../tools'
 import './App.scss'
 
@@ -20,9 +20,12 @@ export function App() {
   }, [])
 
   return (
-    <main>
-      <Sidebar />
-      {routes.map(({ path, Component }) => displayPage(path, Component))}
-    </main>
+    <>
+      <Dialog />
+      <main>
+        <Sidebar />
+        {routes.map(({ path, Component }) => displayPage(path, Component))}
+      </main>
+    </>
   )
 }

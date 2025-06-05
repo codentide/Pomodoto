@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from 'react'
-import { PomodoroContext, SettingsContext } from '../../context'
-import { Range, Switch, Select } from '../../components'
+import { DialogContext, PomodoroContext, SettingsContext } from '../../context'
+import { Range, Switch, Select, Dialog } from '../../components'
 import { minutesToSeconds, secondsToMinutes } from '../../tools'
 import { alarmTracks, tickingTracks } from '../../constants/tracks'
 import { useAlarm } from '../../hooks/useAlarm'
@@ -11,6 +11,7 @@ export function Settings({ className }) {
   const { playAlarm, stopAlarm } = useAlarm()
   const { endedPomodoros, resetPomodoroCount } = useContext(PomodoroContext)
   const { settings, updateSettings, resetSettings } = useContext(SettingsContext)
+  const { showDialog } = useContext(DialogContext)
   const { sessionValues, notification, longBreakInterval } = settings
   const { track, volume } = notification.sound
 
@@ -43,20 +44,20 @@ export function Settings({ className }) {
   // [x]: Buscar una manera con mejor ux para manejar este caso
   // [ ]: Utilizar Aria Dialog porque no suelta el click al salir
   useEffect(() => {
-    // COMENTADO MIENTRAS USAMOS DIALOGS PERSONALZIADOS QUE NO PAUSEN LA EJECUCION
-    // if (longBreakInterval < endedPomodoros) {
-    //   const isConfirmed = window.confirm(
-    //     'Alerta: Reducir el límite de pomodoros reiniciará el progreso actual. ¿Confirmas este cambio?'
-    //   )
+    if (longBreakInterval < endedPomodoros) {
+      // Guardo el valor con el que entró para reasignarlo cuando salga del modal
+      const temporalEndedPomodoros = endedPomodoros + 1
 
-    //   if (isConfirmed) {
-    //     resetPomodoroCount()
-    //     return
-    //   }
-    // }
-
-    if (longBreakInterval < endedPomodoros) resetPomodoroCount()
-  }, [longBreakInterval])
+      showDialog({
+        title: 'Alert',
+        message: 'El valor de los pomodoros es mayor a Long Break Invertal, desea resetearlo?',
+        confirmText: 'Yes',
+        cancelText: 'No',
+        onCancel: () => updateSettings('longBreakInterval', Number(temporalEndedPomodoros)),
+        onConfirm: () => resetPomodoroCount()
+      })
+    }
+  }, [longBreakInterval, endedPomodoros])
 
   const onInputChange = (value, name, type) => {
     switch (type) {
