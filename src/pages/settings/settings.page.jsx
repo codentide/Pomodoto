@@ -40,13 +40,10 @@ export function Settings({ className }) {
   }, [volume])
 
   // Efecto para manejar el longBreakInterval
-
-  // [x]: Buscar una manera con mejor ux para manejar este caso
-  // [ ]: Utilizar Aria Dialog porque no suelta el click al salir
   useEffect(() => {
     if (longBreakInterval < endedPomodoros) {
       // Guardo el valor con el que entró para reasignarlo cuando salga del modal
-      const temporalEndedPomodoros = endedPomodoros + 1
+      const temporalEndedPomodoros = endedPomodoros
 
       showDialog({
         title: 'Alert',
@@ -112,7 +109,7 @@ export function Settings({ className }) {
           <Range
             name="longBreakInterval"
             label="Long break interval"
-            range="2-10"
+            range={`2-10`}
             unit="rnd"
             value={settings.longBreakInterval}
             onChange={(value, name) => onInputChange(value, name, 'number')}
