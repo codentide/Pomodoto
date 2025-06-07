@@ -186,7 +186,7 @@ export const useTimer = () => {
     sendWorkerMessage(isRunning ? 'start' : 'pause')
   }, [isRunning, handleSessionEnd, notification])
 
-  // [ ]: este efecto puede vivir en otro lado quizá
+  // Este efecto puede vivir en otro lado quizá
   // Cambiar el titulo con el conteo
   useEffect(() => {
     const mode = currentMode === 'pomo' ? 'Focus' : 'Break'

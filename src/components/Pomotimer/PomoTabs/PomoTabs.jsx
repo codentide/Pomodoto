@@ -10,7 +10,7 @@ export const PomoTabs = () => {
     const button = event.target
     const mode = button.getAttribute('data-tab')
 
-    // [ ]: Crear modal para manejar esto de mejor manera
+    // [x]: Crear modal para manejar esto de mejor manera
     if (!isRunning) {
       updateCurrentMode(mode, true)
     } else {

@@ -5,8 +5,6 @@ import { Dialog, Sidebar } from '../components'
 import { requestNotificationPermission } from '../tools'
 import './App.scss'
 
-// [x]: Cuando el timer inicie mostrar en la pestaña el tiempo
-
 const routes = [
   { path: '/', Component: Home },
   { path: '/settings', Component: Settings }

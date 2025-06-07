@@ -6,7 +6,7 @@ import { getISODateString, loadFromLocalStorage, saveInLocalStorage } from '../t
 
 // Mediano plazo
 // [ ]: Estudiar métricas interesantes para el objeto stats
-// [ ]: Si el usuario interrumpió el pomodoro, crear otro item "interrupted Pomodoros"
+// [x]: Si el usuario interrumpió el pomodoro, crear otro item "interrupted Pomodoros"
 
 export const PomodoroContext = createContext(null)
 export const PomodoroProvider = ({ children }) => {

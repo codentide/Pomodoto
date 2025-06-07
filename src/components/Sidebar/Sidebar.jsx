@@ -5,12 +5,12 @@ import { isDev } from '../../tools'
 
 import './Sidebar.scss'
 
-import TimerSVG from "../../assets/svg/timer.svg?react"
-import SettingsSVG from "../../assets/svg/settings.svg?react"
+import TimerSVG from '../../assets/svg/timer.svg?react'
+import SettingsSVG from '../../assets/svg/settings.svg?react'
 
 // [ ]: Componentizar enlaces para facilitar lectura
-// [ ]: Cambiar iconos
-// [ ]: Descargar licencia premium de los iconos usados
+// [x]: Cambiar iconos
+// [x]: Descargar licencia premium de los iconos usados
 // [ ]: Aplicar responsividad para celulares
 // [ ]: Implementar lógica de login
 
@@ -28,7 +28,7 @@ export function Sidebar() {
           <li className="sidebar__nav__list__item">
             <Link className="sidebar__tab" to={'/settings'}>
               {/* <img src={settingsIcon} alt="Icono de ajustes" /> */}
-              <SettingsSVG/>
+              <SettingsSVG />
               <span>settings</span>
             </Link>
           </li>

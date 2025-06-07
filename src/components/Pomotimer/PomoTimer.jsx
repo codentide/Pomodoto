@@ -20,7 +20,7 @@ export const PomoTimer = () => {
   // [x]: Añadir función para forzar la siguiente sesión (next)
   // [x]: Crear eventos con teclas para manejar el start/pause - stop - nextSession
   // [ ]: Mostrar shortcuts (space, arrowLeft, arrowRight)
-  // [ ]: Estilizar botón de reset pomodoro count
+  // [x]: Estilizar botón de reset pomodoro count
 
   // Eventos con teclado
   useEffect(() => {
