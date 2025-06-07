@@ -8,32 +8,32 @@ export const useAlarm = () => {
   const currentAudioInstanceRef = useRef(null)
   const userInteractedRef = useRef(false)
 
-  // Es necesario que el usuario interactue primero con el app para ejecutar sonidos
+  // Es necesario que el usuario interactue primero con la app para ejecutar sonidos
   useEffect(() => {
     const handleUserInteraction = () => {
       userInteractedRef.current = true
-      console.log('El usuario ha interactuado, se puede reproducir sonido')
 
-      // Reproducir un sonido silencionso para "engañar" al navegador
-      const silentAudio = new Audio(`/audio/${track}.mp3`) // Crea un archivo silent.mp3
+      // Reproducir un sonido silencioso para "engañar" al navegador y habilitar audio
+      const audioPath = `/audio/${track}.mp3`
+      const silentAudio = new Audio(audioPath)
       silentAudio.volume = 0
+
       silentAudio.play().catch((error) => {
-        console.warn('La reproducción del sonido silencioso fue bloqueada:', error)
+        // Captura errores si la reproducción silenciosa es bloqueada
+        console.warn('La reproducción del sonido silencioso fue bloqueada:', error.name, '-', error.message)
       })
     }
 
+    // Escucha eventos de interacción del usuario una sola vez
     window.addEventListener('wheel', handleUserInteraction, { once: true })
     window.addEventListener('mousedown', handleUserInteraction, { once: true })
     window.addEventListener('keydown', handleUserInteraction, { once: true })
     window.addEventListener('touchstart', handleUserInteraction, { once: true })
 
     return () => {
-      window.removeEventListener('wheel', handleUserInteraction)
-      window.removeEventListener('mousedown', handleUserInteraction)
-      window.removeEventListener('keydown', handleUserInteraction)
-      window.removeEventListener('touchstart', handleUserInteraction)
+      // Los listeners con { once: true } se eliminan solos.
     }
-  }, [])
+  }, [track])
 
   const stopAlarm = useCallback(() => {
     if (!currentAudioInstanceRef.current) return
@@ -45,8 +45,13 @@ export const useAlarm = () => {
 
   const playAlarm = useCallback(
     (manualAudio, manualVolumen) => {
+      // No reproducir si el usuario no ha interactuado o el sonido no está activo en configuración
       if (!userInteractedRef.current || !isActive) return
-      if (currentAudioInstanceRef.current) stopAlarm()
+
+      // Detener alarma actual si ya hay una sonando
+      if (currentAudioInstanceRef.current) {
+        stopAlarm()
+      }
 
       const audioSrc = manualAudio || `/audio/${track}.mp3`
       const audioVol = (manualVolumen || volume) / 100
@@ -54,10 +59,19 @@ export const useAlarm = () => {
       try {
         const audio = new Audio(audioSrc)
         audio.volume = audioVol
-        audio.play()
-        currentAudioInstanceRef.current = audio
+
+        audio
+          .play()
+          .then(() => {
+            currentAudioInstanceRef.current = audio
+          })
+          .catch((error) => {
+            // Captura errores de reproducción (ej. por políticas del navegador como throttling)
+            console.error('Fallo al intentar reproducir la alarma:', error.name, ':', error.message)
+          })
       } catch (error) {
-        console.error(error)
+        // Captura errores al crear la instancia de Audio
+        console.error('Error al crear la instancia de Audio:', error.message)
       }
     },
     [track, volume, isActive, stopAlarm]

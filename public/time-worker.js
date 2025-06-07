@@ -4,7 +4,6 @@ let timerIntervalId = null
 let startTime = 0
 let elapsedTime = 0
 let isRunning = false
-// Experimental
 let sessionDurationMs = null
 
 function sendTimeUpdate() {
@@ -12,9 +11,15 @@ function sendTimeUpdate() {
     type: 'timeUpdate',
     payload: elapsedTime
   })
+
+  console.log(
+    '[TIME-WORKER] INFO: Tiempo actualizado enviado. elapsed:',
+    elapsedTime,
+    'ms. Hora:',
+    new Date().toLocaleTimeString()
+  )
 }
 
-// Experimental
 function sendSessionEnd() {
   postMessage({
     type: 'sessionEnd'
@@ -22,7 +27,10 @@ function sendSessionEnd() {
 }
 
 function startTimer() {
+  console.log('[WEB-WORKER] START: Inicio del timer. Hora:', new Date().toLocaleTimeString())
+
   if (isRunning) {
+    // console.warn('[TIME-WORKER] WARN: Intentando iniciar timer, pero ya está corriendo.')
     return
   }
 
@@ -33,12 +41,14 @@ function startTimer() {
     elapsedTime = Date.now() - startTime
     sendTimeUpdate()
 
-    // Experimental
     if (sessionDurationMs !== null && elapsedTime >= sessionDurationMs) {
       pauseTimer()
       sendSessionEnd()
+      console.log('[TIME-WORKER] INFO: Condición de fin de sesión cumplida. Procediendo a finalizar.')
     }
   }, 1000)
+
+  console.log('[TIME-WORKER] INFO: Timer iniciado con éxito. Hora:', new Date().toLocaleTimeString())
 }
 
 function pauseTimer() {
@@ -73,6 +83,7 @@ onmessage = function ({ data }) {
       break
     case 'setDuration':
       sessionDurationMs = payload * 1000
+      console.log('[TIME-WORKER] INFO: Duración de sesión actualizada a:', sessionDurationMs, 'ms.')
       break
     case 'getInitialTime':
       sendTimeUpdate()

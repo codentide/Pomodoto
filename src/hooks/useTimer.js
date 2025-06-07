@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useCallback } from 'react'
 import { SettingsContext, PomodoroContext } from '../context'
-import { endSessionNotify } from '../tools/notification'
+import { endSessionNotify, getNotificationPermission } from '../tools/notification'
 import { useAlarm } from './useAlarm'
 import { isDev, secondsToTime } from '../tools'
 
@@ -67,11 +67,44 @@ export const useTimer = () => {
     updateIsRunning(false)
   }
 
+  const serviceWorkeNotification = () => {
+    const permission = getNotificationPermission()
+
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      if (permission === 'granted') {
+        navigator.serviceWorker.controller.postMessage({
+          type: 'END_SESSION_NOTIFICATION',
+          payload: {
+            mode: currentMode,
+            title: 'Session Ended'
+          }
+        })
+        console.log(
+          '[USE-TIMER] INFO: Mensaje de notificación enviado al Service Worker. Hora:',
+          new Date().toLocaleTimeString()
+        )
+      } else if (permission === 'default') {
+        // El usuario no ha decidido aún. Podrías mostrar un UI para pedirle que active las notificaciones.
+        console.warn(
+          '[USE-TIMER] WARN: Permiso de notificación no granted (es "default"). No se envió a SW. Hora:',
+          new Date().toLocaleTimeString()
+        )
+        // Aquí podrías quizás invocar a requestNotificationPermission() si quieres forzar la petición,
+        // pero es mejor que el usuario la active con un botón.
+      } else {
+        // notificationPermission === 'denied'
+        console.warn(
+          '[USE-TIMER] WARN: Permiso de notificación denegado. No se envió a SW. Hora:',
+          new Date().toLocaleTimeString()
+        )
+      }
+    }
+  }
+
   // Finaliza el timer y cambia el modo actual
   const handleSessionEnd = useCallback(() => {
-    // Priorizar
-    playAlarm()
-    endSessionNotify(currentMode)
+    // Notificación
+    serviceWorkeNotification()
 
     // Guardar ultimo modo completado
     lastCompletedMode.current = currentMode
@@ -103,7 +136,7 @@ export const useTimer = () => {
     if (timerWorkerRef.current) return
 
     try {
-      timerWorkerRef.current = new Worker(new URL('../timeWorker.js', import.meta.url))
+      timerWorkerRef.current = new Worker(new URL('/time-worker.js', import.meta.url))
       timerWorkerRef.current.postMessage({ type: 'setDuration', payload: sessionValues[currentMode] })
       timerWorkerRef.current.onmessage = ({ data }) => {
         const { type, payload } = data
@@ -113,6 +146,9 @@ export const useTimer = () => {
           const remainingTimeMs = Math.max(0, currentModeTimeMs - elapsedTime)
           updateTimeLeft(Math.ceil(remainingTimeMs / 1000))
         } else if (type === 'sessionEnd') {
+          // Experimental, acortando el camino hasta el sonido y la notificacion
+          playAlarm()
+          // endSessionNotify(currentMode)
           nextSession()
         }
       }
