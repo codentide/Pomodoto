@@ -13,7 +13,7 @@ const CACHE_NAME = 'pomodoro-v1' // Puedes cambiar la versión si actualizas la 
 // Se dispara cuando el Service Worker se instala por primera vez en el navegador del usuario.
 // Aquí se suele "preparar" lo básico, como guardar archivos esenciales en caché.
 self.addEventListener('install', (event) => {
-  console.log('[SW] Service Worker instalado. Hora:', new Date().toLocaleTimeString())
+  // console.log('[SW] Service Worker instalado. Hora:', new Date().toLocaleTimeString())
   // 'event.waitUntil()' le dice al navegador: "¡Espera! No termines de instalarme hasta que esto esté listo."
   event.waitUntil(
     caches
@@ -38,7 +38,7 @@ self.addEventListener('install', (event) => {
 // Se dispara cuando el Service Worker se activa, es decir, cuando ya está listo para controlar las páginas.
 // Aquí se suele "limpiar" lo viejo, como cachés de versiones anteriores.
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Service Worker activado. Hora:', new Date().toLocaleTimeString())
+  console.log('[SW] Activado exitosamente. Hora:', new Date().toLocaleTimeString())
   // 'clients.claim()' es clave aquí. Hace que el SW tome control de todas las pestañas
   // abiertas de tu aplicación, incluso las que ya estaban cargadas antes de que el SW se activara.
   // Sin esto, tendrías que recargar la página para que el SW la controlara.
@@ -51,7 +51,7 @@ self.addEventListener('activate', (event) => {
 // (desde `useTimer.js`) le envía un mensaje al Service Worker.
 self.addEventListener('message', (event) => {
   // 'event.data' contiene lo que tu aplicación le envió al SW.
-  console.log('[SW] Mensaje recibido del cliente:', event.data, '. Hora:', new Date().toLocaleTimeString())
+  // console.log('[SW] Mensaje recibido del cliente:', event.data, '. Hora:', new Date().toLocaleTimeString())
 
   // Verificamos si el mensaje es el que esperamos para una notificación de fin de sesión.
   if (event.data && event.data.type === 'END_SESSION_NOTIFICATION') {

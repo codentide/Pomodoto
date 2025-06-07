@@ -61,7 +61,7 @@ export const PomodoroProvider = ({ children }) => {
     } else {
       setCurrentMode(value)
     }
-    console.log({ currentMode, value })
+    // console.log({ currentMode, value })
   }
 
   const updateTimeLeft = (value) => {

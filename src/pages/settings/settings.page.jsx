@@ -175,6 +175,15 @@ export function Settings({ className }) {
         </fieldset>
 
         <hr />
+          <fieldset>
+            <legend>Shortcuts</legend>
+            <Switch
+              label="Show Shortcuts"
+              name="showShortcuts"
+              value={settings.showShortcuts}
+              onChange={(value, name) => onInputChange(value, name, 'boolean')}
+            ></Switch>
+          </fieldset>
 
         {/* <fieldset>
           <legend>Ticking</legend>

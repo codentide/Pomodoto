@@ -28,8 +28,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker
       .register('/service-worker.js', { scope: '/' })
       .then((registration) => {
-        console.log('¡Service Worker registrado con éxito Scope:', registration.scope, new Date().toLocaleTimeString())
-        console.log(navigator.serviceWorker)
+        // console.log('[SW] Registro exitoso:', registration.scope, new Date().toLocaleTimeString())
       })
       .catch((error) => {
         console.error(error, new Date().toLocaleTimeString())
@@ -37,7 +36,6 @@ if ('serviceWorker' in navigator) {
   })
 } else {
   console.warn(
-    '¡Uy! Tu navegador no soporta Service Workers. Las notificaciones en segundo plano podrían fallar. Hora:',
-    new Date().toLocaleTimeString()
+    'Tu navegador no soporta Service Workers. Las notificaciones en segundo plano podrían fallar'
   )
 }

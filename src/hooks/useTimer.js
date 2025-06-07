@@ -81,21 +81,7 @@ export const useTimer = () => {
           }
         })
         console.log(
-          '[USE-TIMER] INFO: Mensaje de notificación enviado al Service Worker. Hora:',
-          new Date().toLocaleTimeString()
-        )
-      } else if (permission === 'default') {
-        // El usuario no ha decidido aún. Podrías mostrar un UI para pedirle que active las notificaciones.
-        console.warn(
-          '[USE-TIMER] WARN: Permiso de notificación no granted (es "default"). No se envió a SW. Hora:',
-          new Date().toLocaleTimeString()
-        )
-        // Aquí podrías quizás invocar a requestNotificationPermission() si quieres forzar la petición,
-        // pero es mejor que el usuario la active con un botón.
-      } else {
-        // notificationPermission === 'denied'
-        console.warn(
-          '[USE-TIMER] WARN: Permiso de notificación denegado. No se envió a SW. Hora:',
+          '[USE-TIMER] Flag de notificación enviada al SW. Hora:',
           new Date().toLocaleTimeString()
         )
       }
@@ -129,7 +115,7 @@ export const useTimer = () => {
   useEffect(() => {
     // Worker no soportado por el navegador
     if (!window.Worker) {
-      console.warn('Su navegador no soporta Web Workers. El temporizador puede no ser preciso.')
+      console.error('[USE-TIMER] Su navegador no soporta Web Workers.')
       return
     }
 
@@ -147,9 +133,6 @@ export const useTimer = () => {
           const remainingTimeMs = Math.max(0, currentModeTimeMs - elapsedTime)
           updateTimeLeft(Math.ceil(remainingTimeMs / 1000))
         } else if (type === 'sessionEnd') {
-          // Experimental, acortando el camino hasta el sonido y la notificacion
-
-          // endSessionNotify(currentMode)
           nextSession()
         }
       }
@@ -180,7 +163,7 @@ export const useTimer = () => {
 
   useEffect(() => {
     if (isSessionEndingRef.current && !isRunning) {
-      console.log('[END-SESSION-HELPER] End of session request received')
+      console.log('[USE-TIMER] End session request received')
       handleSessionEnd()
     }
     sendWorkerMessage(isRunning ? 'start' : 'pause')

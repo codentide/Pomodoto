@@ -8,10 +8,6 @@ export function notify(title, body, tag) {
   )
 
   if (Notification.permission !== 'granted') {
-    console.warn(
-      '[Notify] WARN: Notificación NO enviada. Permisos no otorgados. Hora:',
-      new Date().toLocaleTimeString()
-    )
     return
   }
 
@@ -24,10 +20,7 @@ export function notify(title, body, tag) {
       renotify: true,
       silent: false
     })
-    console.log(
-      `[Notify] INFO: Notificación "${title}" enviada con éxito. Tag: "${tag}". Hora:`,
-      new Date().toLocaleTimeString()
-    )
+
   } catch (error) {
     // Captura cualquier error que ocurra al crear la notificación
     console.error(
@@ -61,23 +54,11 @@ export function endSessionNotify(mode) {
         new Date().toLocaleTimeString()
       )
   }
-
-  // Log de qué notificación específica se va a enviar
-  console.log(
-    `[endSessionNotify] INFO: Preparando notificación de fin de sesión para el modo: "${mode}", con título: "${title}". Hora:`,
-    new Date().toLocaleTimeString()
-  )
   notify(title, '', 'timer-session-end')
 }
 
 export function requestNotificationPermission() {
   // Log antes de solicitar el permiso
-  console.log(
-    '[RequestPermission] INFO: Solicitando permisos de notificación. Permiso actual:',
-    Notification.permission,
-    '. Hora:',
-    new Date().toLocaleTimeString()
-  )
 
   if (Notification.permission !== 'granted') {
     Notification.requestPermission()
@@ -99,21 +80,10 @@ export function requestNotificationPermission() {
           new Date().toLocaleTimeString()
         )
       })
-  } else {
-    console.log(
-      '[RequestPermission] INFO: Permisos de notificación ya están "granted". No se necesita solicitar. Hora:',
-      new Date().toLocaleTimeString()
-    )
   }
 }
 
 export function getNotificationPermission() {
   // Log al obtener el permiso actual
-  console.log(
-    '[GetPermission] INFO: Obteniendo permiso actual de notificación. Permiso:',
-    Notification.permission,
-    '. Hora:',
-    new Date().toLocaleTimeString()
-  )
   return Notification.permission
 }

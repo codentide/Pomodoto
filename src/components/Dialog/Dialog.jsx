@@ -26,8 +26,8 @@ export const Dialog = () => {
         <h3>{title}</h3>
         <p>{message}</p>
         <div>
-          <button onClick={cancelHandle}>{cancelText}</button>
-          <button onClick={acceptHandle}>{confirmText}</button>
+          <button tabIndex={1} onClick={cancelHandle}>{cancelText}</button>
+          <button tabIndex={2} onClick={acceptHandle}>{confirmText}</button>
         </div>
       </div>
     </div>,

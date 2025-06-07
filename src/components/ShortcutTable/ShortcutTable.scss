@@ -1,0 +1,57 @@
+@use "../../scss/variables.scss" as *;
+
+.shortcut-table {
+
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+
+  width: 280px;
+
+  // background-color: $bl-200;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    gap: .4rem;
+
+    .shortcut-item {
+      display: flex;
+      align-items: center;
+
+      width: 100%;
+      justify-content: space-between;
+
+      color: $wh-600;
+      opacity: .72;
+
+
+
+      p {
+        font-size: .8rem;
+        text-transform: capitalize;
+      }
+
+      kbd {
+        display: grid;
+        place-items: center;
+        padding: .24rem .4rem;
+        border-radius: .32rem;
+
+        min-width: 52px;
+
+        font-family: $font-primary;
+        font-size: .64rem;
+
+        border: 1px solid $bl-500;
+      }
+    }
+
+  }
+
+}

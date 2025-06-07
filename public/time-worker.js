@@ -11,13 +11,6 @@ function sendTimeUpdate() {
     type: 'timeUpdate',
     payload: elapsedTime
   })
-
-  console.log(
-    '[TIME-WORKER] INFO: Tiempo actualizado enviado. elapsed:',
-    elapsedTime,
-    'ms. Hora:',
-    new Date().toLocaleTimeString()
-  )
 }
 
 function sendSessionEnd() {
@@ -27,7 +20,7 @@ function sendSessionEnd() {
 }
 
 function startTimer() {
-  console.log('[WEB-WORKER] START: Inicio del timer. Hora:', new Date().toLocaleTimeString())
+  // console.log('[WEB-WORKER] START: Inicio del timer. Hora:', new Date().toLocaleTimeString())
 
   if (isRunning) {
     // console.warn('[TIME-WORKER] WARN: Intentando iniciar timer, pero ya está corriendo.')
@@ -100,4 +93,4 @@ onmessage = function ({ data }) {
 
 // Se envía el tiempo inicial al cargar el worker para que el hook tenga un valor por defecto.
 sendTimeUpdate()
-console.log('[TIME-WORKER] Successfully Created')
+// console.log('[TIME-WORKER] Successfully Created')

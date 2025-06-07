@@ -17,7 +17,7 @@ export const PomoTimer = () => {
   const { timeLeft, endedPomodoros, isRunning, resetPomodoroCount, currentMode, updateCurrentMode } =
     useContext(PomodoroContext)
   const { startTimer, pauseTimer, stopTimer, nextSession } = useTimer()
-  const { showDialog, dialogState } = useContext(DialogContext)
+  const { dialogState } = useContext(DialogContext)
 
   // [x]: Añadir función para forzar la siguiente sesión (next)
   // [x]: Crear eventos con teclas para manejar el start/pause - stop - nextSession
