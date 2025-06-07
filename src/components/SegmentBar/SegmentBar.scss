@@ -33,12 +33,39 @@
       }
 
       &.active {
-        background-color: $wh-100;
+        background-color: $wh-100; // Estado final de lleno
+        animation: fill .4s ease forwards;
+      }
+
+      &.unactive {
+        // Una nueva clase para deshabilitar con animación
+        background-color: $bl-300; // Estado final de vacío
+        animation: unfill .4s ease forwards;
       }
     }
   }
 
   small {
     text-align: center;
+  }
+}
+
+@keyframes fill {
+  from {
+    background-color: $bl-300;
+  }
+
+  to {
+    background-color: $wh-100;
+  }
+}
+
+@keyframes unfill {
+  from {
+    background-color: $wh-100;
+  }
+
+  to {
+    background-color: $bl-300;
   }
 }
