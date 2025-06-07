@@ -63,6 +63,7 @@ export const useTimer = () => {
 
   // Forzar siguiente sesión
   const nextSession = () => {
+    playAlarm()
     isSessionEndingRef.current = true
     updateIsRunning(false)
   }
@@ -147,7 +148,7 @@ export const useTimer = () => {
           updateTimeLeft(Math.ceil(remainingTimeMs / 1000))
         } else if (type === 'sessionEnd') {
           // Experimental, acortando el camino hasta el sonido y la notificacion
-          playAlarm()
+
           // endSessionNotify(currentMode)
           nextSession()
         }
