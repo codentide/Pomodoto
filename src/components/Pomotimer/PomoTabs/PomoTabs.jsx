@@ -11,22 +11,7 @@ export const PomoTabs = () => {
     const mode = button.getAttribute('data-tab')
 
     // [x]: Crear modal para manejar esto de mejor manera
-    if (!isRunning) {
-      updateCurrentMode(mode, true)
-    } else {
-      // Pausar mientras sale el aviso
-      updateIsRunning(false)
-      showDialog({
-        title: 'Alert',
-        message: 'Si cambias de sesión ahora, se perderá el progreso de la sesión actual, estas seguro?',
-        confirmText: 'Cambiar',
-        cancelText: 'Cancelar',
-        // Si acepta cambia de sesión
-        onConfirm: () => updateCurrentMode(mode, true),
-        // Si declina cae el modal y reanuda el conteo
-        onCancel: () => updateIsRunning(true)
-      })
-    }
+    updateCurrentMode(mode, true)
   }
 
   return (

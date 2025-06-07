@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import { PomodoroContext, SettingsContext } from '../../context'
+import { DialogContext, PomodoroContext, SettingsContext } from '../../context'
 import { PomoTabs } from './PomoTabs/PomoTabs'
 import { SegmentBar } from '../SegmentBar/SegmentBar'
 import { secondsToTime } from '../../tools'
@@ -14,12 +14,14 @@ import RefreshSVG from '../../assets/svg/refresh.svg?react'
 
 export const PomoTimer = () => {
   const { settings } = useContext(SettingsContext)
-  const { timeLeft, endedPomodoros, isRunning, resetPomodoroCount } = useContext(PomodoroContext)
+  const { timeLeft, endedPomodoros, isRunning, resetPomodoroCount, currentMode, updateCurrentMode } =
+    useContext(PomodoroContext)
   const { startTimer, pauseTimer, stopTimer, nextSession } = useTimer()
+  const { showDialog, dialogState } = useContext(DialogContext)
 
   // [x]: Añadir función para forzar la siguiente sesión (next)
   // [x]: Crear eventos con teclas para manejar el start/pause - stop - nextSession
-  // [ ]: Mostrar shortcuts (space, arrowLeft, arrowRight)
+  // [ ]: Mostrar shortcuts
   // [x]: Estilizar botón de reset pomodoro count
 
   // Eventos con teclado
@@ -38,15 +40,31 @@ export const PomoTimer = () => {
         case 'arrowleft':
           stopTimer()
           break
+        case 'keyr':
+          resetPomodoroCount()
+          break
+        case 'keyp':
+          updateCurrentMode('pomo', true)
+          break
+        case 'keys':
+          updateCurrentMode('short', true)
+          break
+        case 'keyl':
+          updateCurrentMode('long', true)
+          break
       }
     }
 
-    window.addEventListener('keydown', handleKeyPressed)
+    if (dialogState.isOpen === true) {
+      window.removeEventListener('keydown', handleKeyPressed)
+    } else {
+      window.addEventListener('keydown', handleKeyPressed)
+    }
 
     return () => {
       window.removeEventListener('keydown', handleKeyPressed)
     }
-  }, [isRunning])
+  }, [isRunning, dialogState.isOpen])
 
   return (
     <div className="pomo-timer">

@@ -1,5 +1,8 @@
 import { useState, createContext, useEffect } from 'react' // useEffect va con los hooks de React
 import { getISODateString, loadFromLocalStorage, saveInLocalStorage } from '../tools'
+import { useContext } from 'react'
+import { DialogContext } from './dialog.context'
+import { useCallback } from 'react'
 
 // [x]: Ended Pomodoros tambien se guardará en local storage
 // [x]: Guardar pomodoros totales para generar estadísticas (x día)
@@ -10,6 +13,8 @@ import { getISODateString, loadFromLocalStorage, saveInLocalStorage } from '../t
 
 export const PomodoroContext = createContext(null)
 export const PomodoroProvider = ({ children }) => {
+  const { showDialog } = useContext(DialogContext)
+
   const POMO_COUNT_KEY = 'pomodoroCount'
   const SESSION_HISTORY_KEY = 'dailyStats'
 
@@ -32,8 +37,31 @@ export const PomodoroProvider = ({ children }) => {
 
   // Funciones para actualizar estados
   const updateCurrentMode = (value, isManually = false) => {
-    setCurrentMode(value)
-    setUserInterrupted(isManually) // Marca si el cambio fue manual
+    setUserInterrupted(isManually)
+
+    // Si el cambio es manual y el temporizador esta corriendo
+    if (isManually && isRunning) {
+      // Si current mode es igual al value no hace nada
+      if (currentMode === value) return
+
+      // Pausamos
+      setIsRunning(false)
+
+      // Mostramos dialogo
+      showDialog({
+        title: 'Alert',
+        message: 'Si cambias de sesión ahora, se perderá el progreso de la sesión actual, estas seguro?',
+        confirmText: 'Cambiar',
+        cancelText: 'Cancelar',
+        // Si acepta cambia de sesión
+        onConfirm: () => setCurrentMode(value, true),
+        // Si declina cae el modal y reanuda el conteo
+        onCancel: () => setIsRunning(true)
+      })
+    } else {
+      setCurrentMode(value)
+    }
+    console.log({ currentMode, value })
   }
 
   const updateTimeLeft = (value) => {

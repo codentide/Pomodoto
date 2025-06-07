@@ -20,7 +20,7 @@ export function Settings({ className }) {
   // Efectos para manejar el sonido
 
   useEffect(() => {
-    playAlarm()
+    playAlarm(track, 100)
     return () => stopAlarm()
   }, [track])
 
@@ -30,7 +30,7 @@ export function Settings({ className }) {
     }
 
     debounceTimeoutRef.current = setTimeout(() => {
-      playAlarm(track, volume)
+      playAlarm()
     }, 100)
 
     return () => {

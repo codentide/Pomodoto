@@ -46,13 +46,13 @@ export const useTimer = () => {
   // Inicia el timer
   const startTimer = () => {
     updateIsRunning(true)
-    playAlarm('/audio/sound-on.mp3', 100)
+    playAlarm('sound-on', 100)
   }
 
   // Pausa el timer
   const pauseTimer = () => {
     updateIsRunning(false, true)
-    playAlarm('/audio/sound-off.mp3', 100)
+    playAlarm('sound-off', 100)
   }
 
   // Detiene el timer y reinicia el tiempo restante al valor de la sesión actual

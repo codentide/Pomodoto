@@ -53,7 +53,7 @@ export const useAlarm = () => {
         stopAlarm()
       }
 
-      const audioSrc = manualAudio || `/audio/${track}.mp3`
+      const audioSrc = `/audio/${manualAudio || track}.mp3`
       const audioVol = (manualVolumen || volume) / 100
 
       try {
