@@ -31,6 +31,7 @@
     min-width: 24rem;
     width: 60%;
     max-width: 36rem;
+    padding-bottom: 2rem;
 
     fieldset {
       display: flex;
@@ -39,6 +40,13 @@
 
       padding: 0;
       border: none;
+
+      div.input-box {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        width: 100%;
+      }
     }
 
     legend {
@@ -73,6 +81,7 @@
 
       &:hover {
         filter: brightness(1.2);
+
         svg {
           filter: drop-shadow(0 0 0.2rem $bl-500);
           animation: reset 0.8s ease-in-out;
@@ -111,4 +120,21 @@
   100% {
     transform: rotate(-360deg);
   }
+}
+
+@media (width <=1024px) {
+  form {
+    min-width: auto !important;
+    width: 100% !important;
+    padding: 3.6rem 0 .8rem !important;
+  }
+
+  div.input-box {
+    gap: .8rem !important;
+  }
+
+  fieldset.shortcut {
+    display: none !important;
+  }
+
 }

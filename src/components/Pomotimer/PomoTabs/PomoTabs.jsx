@@ -24,10 +24,10 @@ export const PomoTabs = () => {
         onClick={handleClick}
         data-tab="short"
       >
-        Short Break
+        Short
       </button>
       <button className={`tab-box__button ${currentMode === 'long' && 'active'}`} onClick={handleClick} data-tab="long">
-        Long Break
+        Long
       </button>
     </div>
   )

@@ -42,3 +42,28 @@
     }
   }
 }
+
+
+
+// Media
+
+@media (width <=480px) {
+
+  .tab-box {
+    // flex-direction: column;
+
+
+    // padding: 0.32rem;
+    border-radius: 0.6rem;
+
+    &__button {
+      // padding: 0.5rem .32rem;
+      border-radius: 0.4rem;
+
+      font-size: 0.8rem;
+      font-weight: 400;
+    }
+  }
+
+
+}

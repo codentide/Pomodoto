@@ -40,3 +40,12 @@ main {
 
   height: 100%;
 }
+
+@media (width <=768px) {
+  .page {
+    width: 100%;
+
+    top: 0;
+    left: 0;
+  }
+}

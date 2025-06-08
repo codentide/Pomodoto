@@ -14,7 +14,7 @@ export const DEFAULT_SETTINGS = {
   autoStartBreak: true,
   autoStartPomodoro: true,
   longBreakInterval: 4,
-  showShortcuts: true,
+  showShortcuts: false,
   notification: {
     isActive: true,
     sound: {

@@ -30,8 +30,6 @@
       color: $wh-600;
       opacity: .72;
 
-
-
       p {
         font-size: .8rem;
         text-transform: capitalize;
@@ -54,4 +52,10 @@
 
   }
 
+}
+
+@media (width <=1024px) {
+  .shortcut-table {
+    visibility: hidden;
+  }
 }

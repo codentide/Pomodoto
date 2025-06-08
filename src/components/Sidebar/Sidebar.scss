@@ -58,7 +58,6 @@
   }
 
   &__nav {
-    padding: 1.2rem;
 
     ul {
       display: flex;
@@ -66,6 +65,7 @@
       align-items: left;
       gap: 0.4rem;
 
+      padding: 1.2rem;
       list-style: none;
 
       li {
@@ -109,4 +109,67 @@
   &__login-box {
     margin-top: auto;
   }
+}
+
+
+@media (width <=768px) {
+
+  .sidebar {
+    top: 0;
+    left: 0;
+
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1r;
+
+    width: 100%;
+    height: fit-content;
+
+    &__nav ul {
+      flex-direction: row;
+      padding: .8rem;
+      padding-left: 0;
+
+      li .sidebar__tab {
+        gap: 0.52rem;
+        padding: 0.32rem 0.56rem;
+
+        span {
+          margin-top: 0.072rem;
+          // display: none;
+        }
+      }
+    }
+
+    &__logo-section {
+      border: none;
+      margin: 0;
+      padding: .8rem;
+      padding-left: 1.2rem;
+      padding-right: 0;
+
+      img {
+        width: 1.8rem;
+      }
+    }
+
+  }
+
+  .sidebar__tab svg {
+    aspect-ratio: 1;
+    width: 1.2rem !important;
+  }
+
+}
+
+@media (width <=480px) {
+
+  .sidebar__tab {
+    span {
+      margin-top: 0.072rem;
+      display: none;
+    }
+  }
+
 }

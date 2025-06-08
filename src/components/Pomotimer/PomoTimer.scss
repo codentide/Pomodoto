@@ -9,7 +9,7 @@
 
   width: fit-content;
 
-  margin: 0 auto;
+  // margin: 0 auto;
 
   &__display {
     display: flex;
@@ -20,7 +20,7 @@
     .time-left {
       display: inline;
 
-      font-size: clamp(2rem, 18vw, 12rem);
+      font-size: clamp(2rem, 28vw, 10rem);
       font-weight: 500;
       font-variant-numeric: tabular-nums;
       text-align: center;
@@ -134,7 +134,18 @@
   from {
     opacity: 0; // Empieza *invisible* (transparente)
   }
+
   to {
     opacity: 1; // Termina *visible* (sólido)
   }
+}
+
+// Media
+
+@media (width <=768px) {
+
+  .time-left {
+    letter-spacing: -0.16rem !important;
+  }
+
 }

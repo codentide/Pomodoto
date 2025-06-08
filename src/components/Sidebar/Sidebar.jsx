@@ -11,7 +11,7 @@ import SettingsSVG from '../../assets/svg/settings.svg?react'
 // [ ]: Componentizar enlaces para facilitar lectura
 // [x]: Cambiar iconos
 // [x]: Descargar licencia premium de los iconos usados
-// [ ]: Aplicar responsividad para celulares
+// [x]: Aplicar responsividad para celulares
 // [ ]: Implementar lógica de login
 
 export function Sidebar() {

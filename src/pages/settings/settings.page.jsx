@@ -123,7 +123,7 @@ export function Settings({ className }) {
         <hr />
         <fieldset>
           <legend>Auto Start</legend>
-          <div style={{ display: 'flex', gap: '2rem', width: '100%' }}>
+          <div className='input-box'>
             <Switch
               name="autoStartPomodoro"
               label="Pomodoro"
@@ -141,7 +141,7 @@ export function Settings({ className }) {
         <hr />
         <fieldset>
           <legend>Notifications</legend>
-          <div style={{ display: 'flex', gap: '2rem', width: '100%' }}>
+          <div className='input-box'>
             <Switch
               name="notification.isActive"
               label="Active"
@@ -175,15 +175,15 @@ export function Settings({ className }) {
         </fieldset>
 
         <hr />
-          <fieldset>
-            <legend>Shortcuts</legend>
-            <Switch
-              label="Show Shortcuts"
-              name="showShortcuts"
-              value={settings.showShortcuts}
-              onChange={(value, name) => onInputChange(value, name, 'boolean')}
-            ></Switch>
-          </fieldset>
+        <fieldset className='shortcut'>
+          <legend>Shortcuts</legend>
+          <Switch
+            label="Show Shortcuts"
+            name="showShortcuts"
+            value={settings.showShortcuts}
+            onChange={(value, name) => onInputChange(value, name, 'boolean')}
+          ></Switch>
+        </fieldset>
 
         {/* <fieldset>
           <legend>Ticking</legend>
