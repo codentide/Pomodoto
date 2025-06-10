@@ -3,6 +3,7 @@ export * from './Pomotimer/PomoTimer'
 export * from './Sidebar/Sidebar'
 export * from './Link/Link'
 export * from './SegmentBar/SegmentBar'
+export * from './AuthorInfo/AuthorInfo'
 
 // Input
 export * from './Input/Range/InputRange'

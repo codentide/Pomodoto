@@ -1,0 +1,86 @@
+@use '../../scss/variables' as *;
+
+.author-info {
+  position: absolute;
+  z-index: 1000;
+  top: 1rem;
+  right: 1.2rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.4rem;
+
+  max-width: 204px;
+  width: fit-content;
+
+  &__message {
+    font-size: 0.8rem;
+    color: $wh-600;
+
+    b {
+      color: $wh-500;
+    }
+  }
+
+  &__icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 0.4rem;
+
+    height: fit-content;
+
+    a {
+      svg {
+        height: 1.2rem;
+        width: 1.2rem;
+
+        path {
+          fill: $wh-600;
+          transition: fill 0.4s ease;
+        }
+      }
+
+      &:hover path {
+        fill: $wh-200;
+      }
+    }
+  }
+}
+
+//
+
+@media (width <= 768px) {
+  .author-info {
+    top: auto;
+    bottom: 1rem;
+    flex-direction: column-reverse;
+  }
+}
+
+@media (width <= 480px) {
+  .author-info {
+    right: 0;
+    bottom: 1.2rem;
+
+    flex-direction: column-reverse;
+    justify-content: center;
+
+    width: 100%;
+    max-width: none;
+
+    &__message {
+      text-align: center;
+    }
+
+    &__icon-box {
+      justify-content: center;
+
+      a svg {
+        height: 1.6rem;
+        width: 1.6rem;
+      }
+    }
+  }
+}
