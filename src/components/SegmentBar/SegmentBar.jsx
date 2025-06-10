@@ -1,41 +1,39 @@
-import React, { useState, useEffect, useRef } from 'react'; // Importamos useRef también
-import './SegmentBar.scss';
+import React, { useState, useEffect, useRef } from 'react' // Importamos useRef también
+import './SegmentBar.scss'
 
 export const SegmentBar = ({ value = 0, limit = 1, showLabel = false, ...props }) => {
-  const [activeBars, setActiveBars] = useState([]);
-  const prevValueRef = useRef(0);
+  const [activeBars, setActiveBars] = useState([])
+  const prevValueRef = useRef(0)
 
   useEffect(() => {
     const newActiveBars = Array.from({ length: Number(limit) }).map((_, index) => {
-      return index < Number(value);
-    });
-
-    console.log(newActiveBars);
+      return index < Number(value)
+    })
 
     const updatedBars = newActiveBars.map((isActive, index) => {
-      const previouslyActive = prevValueRef.current > index;
+      const previouslyActive = prevValueRef.current > index
 
       if (isActive) {
-        return 'active';
+        return 'active'
       } else {
         if (previouslyActive) {
-          return 'unactive';
+          return 'unactive'
         } else {
-          return '';
+          return ''
         }
       }
-    });
+    })
 
-    setActiveBars(updatedBars);
-    prevValueRef.current = Number(value);
-  }, [value, limit]);
+    setActiveBars(updatedBars)
+    prevValueRef.current = Number(value)
+  }, [value, limit])
 
   function renderBar() {
     return Array.from({ length: Number(limit) }).map((_, index) => {
-      const className = activeBars[index] || '';
+      const className = activeBars[index] || ''
 
-      return <div key={index} className={`bar ${className}`}></div>;
-    });
+      return <div key={index} className={`bar ${className}`}></div>
+    })
   }
 
   return (
@@ -45,5 +43,5 @@ export const SegmentBar = ({ value = 0, limit = 1, showLabel = false, ...props }
         {showLabel && <small>{value === limit ? 'Completed' : `${value} of ${limit}`}</small>}
       </div>
     </>
-  );
-};
+  )
+}

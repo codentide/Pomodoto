@@ -72,7 +72,7 @@ export const useTimer = () => {
     const permission = getNotificationPermission()
 
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-      if (permission === 'granted') {
+      if (permission === 'granted' && notification.isActive) {
         navigator.serviceWorker.controller.postMessage({
           type: 'END_SESSION_NOTIFICATION',
           payload: {
@@ -80,10 +80,7 @@ export const useTimer = () => {
             title: 'Session Ended'
           }
         })
-        console.log(
-          '[USE-TIMER] Flag de notificación enviada al SW. Hora:',
-          new Date().toLocaleTimeString()
-        )
+        console.log('[USE-TIMER] Flag de notificación enviada al SW. Hora:', new Date().toLocaleTimeString())
       }
     }
   }
